@@ -1,12 +1,6 @@
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
 
-  # GET /reservations
-  # GET /reservations.json
-  def index
-    @reservations = Reservation.all
-  end
-
   # GET /reservations/1
   # GET /reservations/1.json
   def show
@@ -32,20 +26,6 @@ class ReservationsController < ApplicationController
         format.json { render :show, status: :created, location: @reservation }
       else
         format.html { render :new }
-        format.json { render json: @reservation.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /reservations/1
-  # PATCH/PUT /reservations/1.json
-  def update
-    respond_to do |format|
-      if @reservation.update(reservation_params)
-        format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
-        format.json { render :show, status: :ok, location: @reservation }
-      else
-        format.html { render :edit }
         format.json { render json: @reservation.errors, status: :unprocessable_entity }
       end
     end
