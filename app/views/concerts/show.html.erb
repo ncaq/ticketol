@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @concert.title %>
+</p>
+
+<p>
+  <strong>Artist:</strong>
+  <%= @concert.artist %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @concert.image %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @concert.user %>
+</p>
+
+<%= link_to 'Edit', edit_concert_path(@concert) %> |
+<%= link_to 'Back', concerts_path %>

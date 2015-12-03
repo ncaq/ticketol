@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  concert_id: 
+  place: MyText
+  date: 2015-12-03 15:55:12
+  sell_start: 2015-12-03 15:55:12
+  sell_end: 2015-12-03 15:55:12
+  lottery: false
+
+two:
+  concert_id: 
+  place: MyText
+  date: 2015-12-03 15:55:12
+  sell_start: 2015-12-03 15:55:12
+  sell_end: 2015-12-03 15:55:12
+  lottery: false
