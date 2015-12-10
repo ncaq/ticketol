@@ -23,6 +23,24 @@
     <%= f.label :image %><br>
     <%= f.text_field :image %>
   </div>
+
+  <div class="field">
+    <%= f.label :events, "日程" %><br />
+    <%= f.nested_fields_for :events do |event_f| %>
+      <%= event_f.label :place, "会場" %>
+      <%= event_f.text_field :place %><br />
+      <%= event_f.label :date, "公演日時" %>
+      <%= event_f.date_field :date %><br />
+      <%= event_f.label :sell_start, "販売開始日時" %>
+      <%= event_f.date_field :sell_start %><br />
+      <%= event_f.label :sell_end, "販売終了日時" %>
+      <%= event_f.date_field :sell_end %><br />
+      <%= event_f.label :lottery, "抽選の有無" %>
+      <%= event_f.check_box :lottery %><br />
+    <% end %>
+    <%= f.add_nested_fields_link :events %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
