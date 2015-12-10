@@ -1,5 +1,5 @@
 class ConcertsController < ApplicationController
-  before_action :set_concert, only: [:show, :edit, :update, :destroy]
+  before_action :set_concert, only: [:show, :edit, :update]
 
   # GET /concerts
   # GET /concerts.json
@@ -51,16 +51,6 @@ class ConcertsController < ApplicationController
     end
   end
 
-  # DELETE /concerts/1
-  # DELETE /concerts/1.json
-  def destroy
-    @concert.destroy
-    respond_to do |format|
-      format.html { redirect_to concerts_url, notice: 'Concert was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_concert
@@ -69,6 +59,6 @@ class ConcertsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def concert_params
-      params.require(:concert).permit(:title, :artist, :image, :user_id)
+      params.require(:concert).permit(:title, :artist, :image)
     end
 end
