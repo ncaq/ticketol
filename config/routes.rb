@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users
-  get 'top/show'
-
   root to: "top#show"
+
+  devise_for :users, controllers: {
+               registrations: 'users/registrations'
+             }
 
   resources :concerts, :expect => [:destroy]
   resources :contacts, :expect => [:destroy]
