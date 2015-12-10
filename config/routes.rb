@@ -4,11 +4,11 @@ Rails.application.routes.draw do
 
   root to: "top#show"
 
-  resources :concerts
-  resources :events
-  resources :contacts
-  resources :reservations
-  resources :users
+  resources :concerts, :expect => [:destroy]
+  resources :contacts, :expect => [:destroy]
+  resources :events, :only => [:show]
+  resources :reservations, :only => [:show]
+  resources :users, :only => [:index, :show]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
