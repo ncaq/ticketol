@@ -4,4 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   include Pundit
+
+  def authorize_user
+    authorize current_user
+  end
+
+  def authorize_record
+    authorize current_record
+  end
 end
