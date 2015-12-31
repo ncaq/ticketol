@@ -5,3 +5,40 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+case Rails.env
+when "development"
+  begin
+    admin = User.create! do |u|
+      u.email = 'admin@example.com'
+      u.name = 'admin'
+      u.password = ENV['ticketol_admin_password']
+      u.password_confirmation = u.password
+      u.admin!
+    end
+    admin.save!
+  rescue
+    p 'May be you forgot'
+    p 'export ticketol_admin_password=hogehoge'
+  end
+
+  buyer = User.create! do |u|
+    u.email = 'buyer@example.com'
+    u.name = 'buyer'
+    u.password = 'hogehoge'
+    u.password_confirmation = u.password
+    u.buyer!
+  end
+  buyer.save!
+
+  seller = User.create! do |u|
+    u.email = 'seller@example.com'
+    u.name = 'seller'
+    u.password = 'hogehoge'
+    u.password_confirmation = u.password
+    u.seller!
+  end
+  seller.save!
+
+when "production"
+end
