@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Ticketol</title>
-        <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-        <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-        <%= csrf_meta_tags %>
-    </head>
-    <body>
+  <head>
+    <title>Ticketol</title>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
 
-        <p class="notice"><%= notice %></p>
-        <p class="alert"><%= alert %></p>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
 
-        <% if user_signed_in? %>
-            Logged in as <strong><%= current_user.email %></strong>.
-            <% if current_user.seller? %>
-                <%= link_to "コンサート登録", new_concert_path %> |
-            <% end %>
-            <%= link_to "Edit profile", edit_user_registration_path %> |
-            <%= link_to "Logout", destroy_user_session_path, method: :delete %>
-        <% else %>
-            <%= link_to "Sign up", new_user_registration_path %> |
-            <%= link_to "Login", new_user_session_path %>
-        <% end %>
+    <% if user_signed_in? %>
+      Logged in as <strong><%= current_user.email %></strong>.
+      <% if current_user.seller? %>
+        <%= link_to "コンサート登録", new_concert_path %> |
+      <% end %>
+      <%= link_to "Edit profile", edit_user_registration_path %> |
+      <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to "Sign up", new_user_registration_path %> |
+      <%= link_to "Login", new_user_session_path %>
+    <% end %>
 
-        <%= yield %>
+    <%= yield %>
 
-    </body>
+  </body>
 </html>
