@@ -16,6 +16,7 @@ class ConcertsController < ApplicationController
   def new
     @concert = Concert.new
     @concert.events.build
+    @concert.events.map { |e| e.grades.build }
   end
 
   # GET /concerts/1/edit
