@@ -25,7 +25,9 @@ class ConcertsController < ApplicationController
   # POST /concerts
   # POST /concerts.json
   def create
-    @concert = Concert.new(concert_params)
+    @concert = Concert.new(concert_params) do |c|
+      c.user_id = current_user.id
+    end
 
     respond_to do |format|
       if @concert.save
@@ -53,13 +55,15 @@ class ConcertsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_concert
-      @concert = Concert.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_concert
+    @concert = Concert.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def concert_params
-      params.require(:concert).permit(:title, :artist, :image, :events)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def concert_params
+    params.require(:concert).
+      permit(:title, :artist, :image,
+             events_attributes: [:place, :date, :sell_start, :sell_end, :lottery])
+  end
 end
