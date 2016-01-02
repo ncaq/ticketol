@@ -22,21 +22,27 @@ when "development"
     p 'export ticketol_admin_password=hogehoge'
   end
 
-  buyer = User.create! do |u|
-    u.email = 'buyer@example.com'
-    u.name = 'buyer'
-    u.password = 'hogehoge'
-    u.password_confirmation = u.password
-    u.buyer!
+  begin
+    buyer = User.create! do |u|
+      u.email = 'buyer@example.com'
+      u.name = 'buyer'
+      u.password = 'hogehoge'
+      u.password_confirmation = u.password
+      u.buyer!
+    end
+    buyer.save!
+  rescue
   end
-  buyer.save!
 
-  seller = User.create! do |u|
-    u.email = 'seller@example.com'
-    u.name = 'seller'
-    u.password = 'hogehoge'
-    u.password_confirmation = u.password
-    u.seller!
+  begin
+    seller = User.create! do |u|
+      u.email = 'seller@example.com'
+      u.name = 'seller'
+      u.password = 'hogehoge'
+      u.password_confirmation = u.password
+      u.seller!
+    end
+    seller.save!
+  rescue
   end
-  seller.save!
 end
