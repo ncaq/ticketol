@@ -1,4 +1,25 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_user_registration_path(@user) %> |
+<main>
+  <table>
+    <thead>
+      <tr>
+        <th>email</th>
+        <% if current_user.admin? %>
+          <th>role</th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td><%= @user.email %></td>
+        <% if current_user.admin? %>
+          <td><%= @user.role %></td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+</main>
+
 <%= link_to 'Back', users_path %>
