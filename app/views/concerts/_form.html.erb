@@ -43,8 +43,8 @@
       <%= grade_f.text_field :price %><br />
 
       <%= grade_f.nested_fields_for :tickets do |ticket_f| %>
+        <%= ticket_f.label :seat, "席番号" %>
         <%= ticket_f.text_field :seat %><br />
-        <%= ticket_f.label :seat, "席番号" %><br />
       <% end %>
       <%= grade_f.add_nested_fields_link :tickets %>
     <% end %>
