@@ -39,6 +39,4 @@ when "development"
     u.seller!
   end
   seller.save!
-
-when "production"
 end
