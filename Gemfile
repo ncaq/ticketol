@@ -35,7 +35,6 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'capistrano-rails', group: :development
 
 gem 'devise'
-gem 'pundit'
 gem 'nested_form_fields'
 
 group :development, :test do

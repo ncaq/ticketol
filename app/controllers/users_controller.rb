@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show]
-  before_action :authorize_user
 
   # GET /users
   # GET /users.json
