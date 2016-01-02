@@ -12,43 +12,45 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br>
+    <%= f.label :title %>
     <%= f.text_area :title %>
   </div>
   <div class="field">
-    <%= f.label :artist %><br>
+    <%= f.label :artist %>
     <%= f.text_area :artist %>
   </div>
   <div class="field">
-    <%= f.label :image %><br>
+    <%= f.label :image %>
     <%= f.file_field :image %>
   </div>
 
-  <div class="field">
-    <%= f.label :events, "日程" %><br />
-    <%= f.nested_fields_for :events do |event_f| %>
-      <%= event_f.label :place, "会場" %>
-      <%= event_f.text_field :place %><br />
-      <%= event_f.label :date, "公演日時" %>
-      <%= event_f.date_field :date %><br />
-      <%= event_f.label :sell_start, "販売開始日時" %>
-      <%= event_f.date_field :sell_start %><br />
-      <%= event_f.label :sell_end, "販売終了日時" %>
-      <%= event_f.date_field :sell_end %><br />
-      <%= event_f.label :lottery, "抽選の有無" %>
-      <%= event_f.check_box :lottery %><br />
+  <%= f.nested_fields_for :events do |event_f| %>
+    <%= event_f.label :place, "会場" %>
+    <%= event_f.text_field :place %><br />
+    <%= event_f.label :date, "公演日時" %>
+    <%= event_f.date_field :date %><br />
+    <%= event_f.label :sell_start, "販売開始日時" %>
+    <%= event_f.date_field :sell_start %><br />
+    <%= event_f.label :sell_end, "販売終了日時" %>
+    <%= event_f.date_field :sell_end %><br />
+    <%= event_f.label :lottery, "抽選の有無" %>
+    <%= event_f.check_box :lottery %><br />
 
-      <%= event_f.label :events, "席一覧" %><br />
-      <%= event_f.nested_fields_for :grades do |grade_f| %>
-        <%= grade_f.label :name, "ブロック名" %>
-        <%= grade_f.text_field :name %><br />
-        <%= grade_f.label :price, "価格" %>
-        <%= grade_f.text_field :price %><br />
+    <%= event_f.nested_fields_for :grades do |grade_f| %>
+      <%= grade_f.label :name, "ブロック名" %>
+      <%= grade_f.text_field :name %><br />
+      <%= grade_f.label :price, "価格" %>
+      <%= grade_f.text_field :price %><br />
+
+      <%= grade_f.nested_fields_for :tickets do |ticket_f| %>
+        <%= ticket_f.text_field :seat %><br />
+        <%= ticket_f.label :seat, "席番号" %><br />
       <% end %>
-      <%= event_f.add_nested_fields_link :grades %>
+      <%= grade_f.add_nested_fields_link :tickets %>
     <% end %>
-    <%= f.add_nested_fields_link :events %>
-  </div>
+    <%= event_f.add_nested_fields_link :grades %>
+  <% end %>
+  <%= f.add_nested_fields_link :events %>
 
   <div class="actions">
     <%= f.submit %>

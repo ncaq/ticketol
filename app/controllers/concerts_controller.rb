@@ -16,7 +16,12 @@ class ConcertsController < ApplicationController
   def new
     @concert = Concert.new
     @concert.events.build
-    @concert.events.map { |e| e.grades.build }
+    @concert.events.map do |e|
+      e.grades.build
+      e.grades.map do |g|
+        g.tickets.build
+      end
+    end
   end
 
   # GET /concerts/1/edit
