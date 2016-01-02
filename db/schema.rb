@@ -14,10 +14,10 @@
 ActiveRecord::Schema.define(version: 20151203074145) do
 
   create_table "concerts", force: :cascade do |t|
-    t.text     "title"
-    t.text     "artist"
+    t.text     "title",      null: false
+    t.text     "artist",     null: false
     t.binary   "image"
-    t.integer  "user_id"
+    t.integer  "user_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -25,9 +25,9 @@ ActiveRecord::Schema.define(version: 20151203074145) do
   add_index "concerts", ["user_id"], name: "index_concerts_on_user_id"
 
   create_table "contacts", force: :cascade do |t|
-    t.integer  "user_id"
-    t.text     "subject"
-    t.text     "request"
+    t.integer  "user_id",    null: false
+    t.text     "subject",    null: false
+    t.text     "request",    null: false
     t.text     "response"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -36,12 +36,12 @@ ActiveRecord::Schema.define(version: 20151203074145) do
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id"
 
   create_table "events", force: :cascade do |t|
-    t.integer  "concert_id"
-    t.text     "place"
-    t.datetime "date"
-    t.datetime "sell_start"
+    t.integer  "concert_id", null: false
+    t.text     "place",      null: false
+    t.datetime "date",       null: false
+    t.datetime "sell_start", null: false
     t.datetime "sell_end"
-    t.boolean  "lottery"
+    t.boolean  "lottery",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(version: 20151203074145) do
   add_index "events", ["concert_id"], name: "index_events_on_concert_id"
 
   create_table "grades", force: :cascade do |t|
-    t.integer  "event_id"
-    t.text     "name"
-    t.integer  "price"
+    t.integer  "event_id",   null: false
+    t.text     "name",       null: false
+    t.integer  "price",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -59,8 +59,8 @@ ActiveRecord::Schema.define(version: 20151203074145) do
   add_index "grades", ["event_id"], name: "index_grades_on_event_id"
 
   create_table "reservations", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "payment_method"
+    t.integer  "user_id",        null: false
+    t.integer  "payment_method", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
@@ -68,9 +68,9 @@ ActiveRecord::Schema.define(version: 20151203074145) do
   add_index "reservations", ["user_id"], name: "index_reservations_on_user_id"
 
   create_table "tickets", force: :cascade do |t|
-    t.integer  "grade_id"
-    t.integer  "reservation_id"
-    t.text     "seat"
+    t.integer  "grade_id",       null: false
+    t.integer  "reservation_id", null: false
+    t.text     "seat",           null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(version: 20151203074145) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "name",                   default: "", null: false
-    t.integer  "role",                   default: 0
+    t.integer  "role",                   default: 0,  null: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end
