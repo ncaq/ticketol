@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151203074145) do
+ActiveRecord::Schema.define(version: 20160103084552) do
+
+  create_table "concert_images", force: :cascade do |t|
+    t.integer  "concert_id"
+    t.binary   "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "concert_images", ["concert_id"], name: "index_concert_images_on_concert_id"
 
   create_table "concerts", force: :cascade do |t|
     t.text     "title",      null: false

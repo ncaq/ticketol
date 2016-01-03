@@ -18,6 +18,7 @@ class ConcertsController < ApplicationController
   def new
     write?
     @concert = Concert.new
+    @concert.build_concert_image
     @concert.events.build
     @concert.events.map do |e|
       e.grades.build
@@ -76,16 +77,21 @@ class ConcertsController < ApplicationController
   def concert_params
     params.require(:concert).
       permit(:title, :artist,
+             concert_image_attributes: [:upload],
              events_attributes: [:place, :date, :sell_start, :sell_end, :lottery,
                                  grades_attributes: [:name, :price,
                                                      tickets_attributes: [:seat]]])
   end
 
   def write?
-    if current_user.admin? || current_user.seller?
-      allow
-    else
-      deny
+    begin
+      if current_user.admin? || current_user.seller?
+        allow
+      else
+        deny
+      end
+    rescue
+      raise Forbidden
     end
   end
 end

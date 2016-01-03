@@ -19,6 +19,12 @@
     <%= f.label :artist %>
     <%= f.text_area :artist %>
   </div>
+  <div class="field">
+    <%= f.label :concert_image, "画像" %>
+    <%= f.fields_for :concert_image do |image_f| %>
+      <%= image_f.file_field :upload, accept: 'image/png' %>
+    <% end %>
+  </div>
 
   <%= f.nested_fields_for :events do |event_f| %>
     <%= event_f.label :place, "会場" %>
