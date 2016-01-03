@@ -4,7 +4,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    if current_user.admin?
+    if current_user && current_user.admin?
       allow
       @contacts = Contact.all
     else
@@ -15,7 +15,11 @@ class ContactsController < ApplicationController
   # GET /contacts/1
   # GET /contacts/1.json
   def show
-    create?
+    if current_user && current_user.id == @contact.user_id || current_user.admin?
+      allow
+    else
+      deny
+    end
   end
 
   # GET /contacts/new
@@ -26,7 +30,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts/1/edit
   def edit
-    if current_user.admin?
+    if current_user && current_user.admin?
       allow
     else
       deny
@@ -36,8 +40,10 @@ class ContactsController < ApplicationController
   # POST /contacts
   # POST /contacts.json
   def create
-    create?
-    @contact = Contact.new(contact_params)
+    allow
+    @contact = Contact.new(contact_params) do |c|
+      c.user_id = current_user.id
+    end
 
     respond_to do |format|
       if @contact.save
@@ -53,7 +59,7 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   # PATCH/PUT /contacts/1.json
   def update
-    if current_user.admin?
+    if current_user && current_user.admin?
       allow
       respond_to do |format|
         if @contact.update(contact_params)
@@ -77,14 +83,10 @@ class ContactsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def contact_params
-    params.require(:contact).permit(:subject, :request, :response)
-  end
-
-  def create?
-    if current_user.admin? || current_user.id == @contact.user_id
-      allow
-    else
-      deny
+    permits = [:subject, :request]
+    if current_user && current_user.admin?
+      permits << :response
     end
+    params.require(:contact).permit(permits)
   end
 end
