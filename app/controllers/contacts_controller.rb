@@ -4,12 +4,8 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    if current_user && current_user.admin?
-      allow
-      @contacts = Contact.all
-    else
-      deny
-    end
+    allow
+    @contacts = can_contact_all
   end
 
   # GET /contacts/1
@@ -88,5 +84,17 @@ class ContactsController < ApplicationController
       permits << :response
     end
     params.require(:contact).permit(permits)
+  end
+
+  def can_contact_all
+    if current_user
+      if current_user.admin?
+        return Contact.all
+      else
+        return Contact.where(user_id: current_user.id)
+      end
+    else
+      return []
+    end
   end
 end
