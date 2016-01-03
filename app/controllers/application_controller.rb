@@ -10,6 +10,11 @@ class ApplicationController < ActionController::Base
     @authorized = true
   end
 
+  def deny
+    @authorized = false
+    raise Forbidden
+  end
+
   def forbidden_when_forgot_authorized
     if self.class.ancestors.include?(DeviseController) # deviseは独自の権限管理をしているので除外
       allow

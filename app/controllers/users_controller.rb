@@ -7,13 +7,18 @@ class UsersController < ApplicationController
     if current_user.admin?
       allow
       @users = User.all
+    else
+      deny
     end
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    if current_user.admin? || user.id == @user.id
+    if current_user.admin? || current_user.id == @user.id
+      allow
+    else
+      deny
     end
   end
 
