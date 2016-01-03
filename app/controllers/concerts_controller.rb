@@ -75,8 +75,10 @@ class ConcertsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def concert_params
     params.require(:concert).
-      permit(:title, :artist, :image,
-             events_attributes: [:place, :date, :sell_start, :sell_end, :lottery])
+      permit(:title, :artist,
+             events_attributes: [:place, :date, :sell_start, :sell_end, :lottery,
+                                 grades_attributes: [:name, :price,
+                                                     tickets_attributes: [:seat]]])
   end
 
   def write?

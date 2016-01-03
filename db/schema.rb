@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 20151203074145) do
   create_table "concerts", force: :cascade do |t|
     t.text     "title",      null: false
     t.text     "artist",     null: false
-    t.binary   "image"
     t.integer  "user_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -69,7 +68,7 @@ ActiveRecord::Schema.define(version: 20151203074145) do
 
   create_table "tickets", force: :cascade do |t|
     t.integer  "grade_id",       null: false
-    t.integer  "reservation_id", null: false
+    t.integer  "reservation_id"
     t.text     "seat",           null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false

@@ -19,10 +19,6 @@
     <%= f.label :artist %>
     <%= f.text_area :artist %>
   </div>
-  <div class="field">
-    <%= f.label :image %>
-    <%= f.file_field :image %>
-  </div>
 
   <%= f.nested_fields_for :events do |event_f| %>
     <%= event_f.label :place, "会場" %>

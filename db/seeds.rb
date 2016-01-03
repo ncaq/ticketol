@@ -9,17 +9,21 @@
 case Rails.env
 when "development"
   begin
-    admin = User.create! do |u|
-      u.email = 'admin@example.com'
-      u.name = 'admin'
-      u.password = ENV['ticketol_admin_password']
-      u.password_confirmation = u.password
-      u.admin!
+    if ENV['ticketol_admin_password']
+      admin = User.create! do |u|
+        u.email = 'admin@example.com'
+        u.name = 'admin'
+        u.password = ENV['ticketol_admin_password']
+        u.password_confirmation = u.password
+        u.admin!
+      end
+      admin.save!
+    else
+      p 'May be you forgot'
+      p 'export ticketol_admin_password=hogehoge'
     end
-    admin.save!
-  rescue
-    p 'May be you forgot'
-    p 'export ticketol_admin_password=hogehoge'
+  rescue => e
+    p e
   end
 
   begin
@@ -31,7 +35,8 @@ when "development"
       u.buyer!
     end
     buyer.save!
-  rescue
+  rescue => e
+    p e
   end
 
   begin
@@ -43,6 +48,7 @@ when "development"
       u.seller!
     end
     seller.save!
-  rescue
+  rescue => e
+    p e
   end
 end
