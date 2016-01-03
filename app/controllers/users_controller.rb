@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    if current_user.admin?
+    if current_user && current_user.admin?
       allow
       @users = User.all
     else
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    if current_user.admin? || current_user.id == @user.id
+    if current_user && (current_user.admin? || current_user.id == @user.id)
       allow
     else
       deny

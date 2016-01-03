@@ -84,14 +84,10 @@ class ConcertsController < ApplicationController
   end
 
   def write?
-    begin
-      if current_user.admin? || current_user.seller?
-        allow
-      else
-        deny
-      end
-    rescue
-      raise Forbidden
+    if current_user && (current_user.admin? || current_user.seller?)
+      allow
+    else
+      deny
     end
   end
 end

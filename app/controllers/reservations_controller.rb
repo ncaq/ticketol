@@ -4,7 +4,7 @@ class ReservationsController < ApplicationController
   # GET /reservations/1
   # GET /reservations/1.json
   def show
-    if current_user.admin? || current_user.id == @reservation.user_id
+    if current_user && (current_user.admin? || current_user.id == @reservation.user_id)
       allow
     end
   end
