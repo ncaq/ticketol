@@ -4,16 +4,19 @@ class ConcertsController < ApplicationController
   # GET /concerts
   # GET /concerts.json
   def index
+    allow
     @concerts = Concert.all
   end
 
   # GET /concerts/1
   # GET /concerts/1.json
   def show
+    allow
   end
 
   # GET /concerts/new
   def new
+    write?
     @concert = Concert.new
     @concert.events.build
     @concert.events.map do |e|
@@ -26,11 +29,13 @@ class ConcertsController < ApplicationController
 
   # GET /concerts/1/edit
   def edit
+    write?
   end
 
   # POST /concerts
   # POST /concerts.json
   def create
+    write?
     @concert = Concert.new(concert_params) do |c|
       c.user_id = current_user.id
     end
@@ -49,6 +54,7 @@ class ConcertsController < ApplicationController
   # PATCH/PUT /concerts/1
   # PATCH/PUT /concerts/1.json
   def update
+    write?
     respond_to do |format|
       if @concert.update(concert_params)
         format.html { redirect_to @concert, notice: 'Concert was successfully updated.' }
@@ -71,5 +77,13 @@ class ConcertsController < ApplicationController
     params.require(:concert).
       permit(:title, :artist, :image,
              events_attributes: [:place, :date, :sell_start, :sell_end, :lottery])
+  end
+
+  def write?
+    if current_user.admin? || current_user.seller?
+      allow
+    else
+      deny
+    end
   end
 end
