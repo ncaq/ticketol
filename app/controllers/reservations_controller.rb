@@ -1,5 +1,6 @@
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show]
+  before_action :set_event
 
   # GET /reservations/1
   # GET /reservations/1.json
@@ -9,6 +10,8 @@ class ReservationsController < ApplicationController
 
   def new
     write?
+    @reservation = Reservation.new
+    @reservation.tickets.build
   end
 
   def create
@@ -23,6 +26,16 @@ class ReservationsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_reservation
     @reservation = Reservation.find(params[:id])
+  end
+
+  def set_event
+    @event = Event.find(params[:event_id])
+    @concert = @event.concert
+    @grades = @event.grades
+  end
+
+  def reservation_params
+    params.require(:reservation).permit(:payment_method)
   end
 
   def has?

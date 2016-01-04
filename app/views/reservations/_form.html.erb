@@ -1,0 +1,49 @@
+<%= form_for(@reservation) do |f| %>
+  <% if @reservation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
+
+      <ul>
+        <% @reservation.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :event_id, :value => params[:event_id] %>
+
+  <div class="field">
+    <%= f.label :concert, 'コンサート' %><br>
+    <%= f.text_field :concert, :readonly => true, :value => @concert.title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :event, '会場' %><br>
+    <%= f.text_field :event, :readonly => true, :value => @event.place %>
+  </div>
+
+  <div class="field">
+    <%= label :grade, '席グレード' %><br>
+    <%= select :grade, :id, @event.grades.map { |g| [g.name + '(' + g.price.to_s + '円)', g.id] } %>
+  </div>
+
+  <% if @event.lottery %>
+    <%= f.number_field :volume, '購入数' %>
+  <% else %>
+    <%= f.nested_fields_for :tickets do |ticket_f| %>
+      <%= ticket_f.label :seat, '席番号' %>
+      <%= ticket_f.select :seat, [] %>
+    <% end %>
+    <%= f.add_nested_fields_link :tickets %>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :payment_method, '支払い方法' %><br>
+    <%= f.select :payment_method, Reservation.payment_methods.keys.to_a %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit '購入' %>
+  </div>
+<% end %>

@@ -68,19 +68,25 @@ when "development"
     concert.events = [event]
     event.save!
 
-    grade = Grade.new
-    grade.name = 's'
-    grade.price = '10000'
-    event.grades = [grade]
-    grade.save!
+    seat = 100
+    [['s', '10000'], ['a', '5000'], ['b', '2000']].each{ | (name, price) |
+      grade = Grade.new
+      grade.name = name
+      grade.price = price
+      event.grades << grade
+      grade.save!
 
-    tickets = (100..150).map{ |i|
-      ticket = Ticket.new
-      ticket.seat = i.to_s
-      ticket
+      tickets = (seat..seat + 50).map{ |i|
+        ticket = Ticket.new
+        ticket.seat = i.to_s
+        ticket
+      }
+      grade.tickets = tickets
+      tickets.each(&:save!)
+
+      seat += 50
     }
-    grade.tickets = tickets
-    tickets.each(&:save!)
+
   rescue => e
     p e
   end
