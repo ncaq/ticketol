@@ -14,7 +14,7 @@ class Reservation < ActiveRecord::Base
         raise em
       end
 
-      ticketsIds = tickets_attributes.map { |t| t[1][:id] }
+      ticketsIds = tickets_attributes.to_a.select { |t| not t[1][:_destroy]}.map { |t| t[1][:id] }
 
       if ticketsIds != ticketsIds.uniq
         em = '同じチケットを注文することはできません'

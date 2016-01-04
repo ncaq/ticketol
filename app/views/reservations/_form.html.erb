@@ -34,6 +34,7 @@
     <%= f.nested_fields_for :tickets do |ticket_f| %>
       <%= ticket_f.label :id, '席番号' %>
       <%= ticket_f.select :id, [] %>
+      <%= ticket_f.remove_nested_fields_link %>
     <% end %>
     <%= f.add_nested_fields_link :tickets %>
   <% end %>

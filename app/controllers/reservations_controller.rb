@@ -74,7 +74,7 @@ class ReservationsController < ApplicationController
   def reservation_params
     params.require(:reservation).
       permit(:payment_method,
-             tickets_attributes: [:id] )
+             tickets_attributes: [:id, :_destroy] )
   end
 
   def has?
