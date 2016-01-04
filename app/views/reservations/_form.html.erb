@@ -15,12 +15,12 @@
 
   <div class="field">
     <%= label :concert, 'コンサート' %><br>
-    <%= text_field :concert, :title, :readonly => true, :value => @concert.title %>
+    <%= text_field :concert, :title, :disabled => true, :value => @concert.title %>
   </div>
 
   <div class="field">
     <%= label :event, '会場' %><br>
-    <%= text_field :event, :place, :readonly => true, :value => @event.place %>
+    <%= text_field :event, :place, :disabled => true, :value => @event.place %>
   </div>
 
   <div class="field">
