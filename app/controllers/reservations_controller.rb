@@ -30,41 +30,24 @@ class ReservationsController < ApplicationController
   def create
     if current_user && current_user.buyer? && @event.sell_time?
       allow
-      begin
-        unless @event.lottery
-          @reservation = Reservation.new()
-          @reservation.user_id = current_user.id
-          @reservation.payment_method = reservation_params[:payment_method]
-          ticketsIds = reservation_params[:tickets_attributes].map { |t| t[1][:id] }
-          tryBuyTickets = Ticket.where(id: ticketsIds)
+      @reservation = Reservation.new()
+      @reservation.user_id = current_user.id
+      @reservation.payment_method = reservation_params[:payment_method]
+      if @event.lottery
 
-          @reservation.save!
-          updateSucessLength = Ticket.where(id: ticketsIds, reservation_id: nil).
-                               update_all(:reservation_id => @reservation.id)
-
-          respond_to do |format|
-            if 0 < tryBuyTickets.length && tryBuyTickets.length == updateSucessLength
-              if @reservation.convenience?
-                @reservation.convenience_password = SecureRandom.hex(5)
-                @reservation.save!
-              end
-              format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }
-              format.json { render :show, status: :created, location: @reservation }
-            else
-              raise
-            end
+      else
+        respond_to do |format|
+          if @reservation.notLottery(reservation_params[:tickets_attributes])
+            format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }
+            format.json { render :show, status: :created, location: @reservation }
+          else
+            format.html {
+              params[:event][:id] = @event.id
+              render :new
+            }
+            format.json { render json: @reservation.errors, status: :unprocessable_entity }
           end
         end
-      rescue
-        if @reservation.id
-          Ticket.where(reservation_id: @reservation.id).update_all(:reservation_id => nil)
-          @reservation.destroy
-        end
-        format.html {
-          params[:event][:id] = @event.id
-          render :new
-        }
-        format.json { render json: @reservation.errors, status: :unprocessable_entity }
       end
     else
       deny
