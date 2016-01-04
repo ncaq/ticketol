@@ -6,6 +6,27 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+def seat_set(event)
+  seat = 100
+  [['s', '10000'], ['a', '5000'], ['b', '2000']].each{ | (name, price) |
+    grade = Grade.new
+    grade.name = name
+    grade.price = price
+    event.grades << grade
+    grade.save!
+
+    tickets = (seat..seat + 50).map{ |i|
+      ticket = Ticket.new
+      ticket.seat = i.to_s
+      ticket
+    }
+    grade.tickets = tickets
+    tickets.each(&:save!)
+
+    seat += 50
+  }
+end
+
 case Rails.env
 when "development"
   if ENV['ticketol_admin_password']
@@ -46,31 +67,27 @@ when "development"
   concert_image = ConcertImage.new
   concert.concert_image = concert_image
 
-  event = Event.new
-  event.place = 'hoge'
-  event.date       = Time.zone.parse('2016-02-10')
-  event.sell_start = Time.zone.parse('2016-01-01')
-  event.sell_end   = Time.zone.parse('2016-02-09')
-  event.lottery = false
-  concert.events = [event]
-  event.save!
+  begin
+    event = Event.new
+    event.place = 'non_lottery_event'
+    event.date       = Time.zone.parse('2016-02-10')
+    event.sell_start = Time.zone.parse('2016-01-01')
+    event.sell_end   = Time.zone.parse('2016-02-09')
+    event.lottery = false
+    concert.events << event
+    event.save!
+    seat_set(event)
+  end
 
-  seat = 100
-  [['s', '10000'], ['a', '5000'], ['b', '2000']].each{ | (name, price) |
-    grade = Grade.new
-    grade.name = name
-    grade.price = price
-    event.grades << grade
-    grade.save!
-
-    tickets = (seat..seat + 50).map{ |i|
-      ticket = Ticket.new
-      ticket.seat = i.to_s
-      ticket
-    }
-    grade.tickets = tickets
-    tickets.each(&:save!)
-
-    seat += 50
-  }
+  begin
+    event = Event.new
+    event.place = 'lottery_event'
+    event.date       = Time.zone.parse('2016-02-10')
+    event.sell_start = Time.zone.parse('2016-01-01')
+    event.sell_end   = Time.zone.parse('2016-02-09')
+    event.lottery = true
+    concert.events << event
+    event.save!
+    seat_set(event)
+  end
 end
