@@ -6,7 +6,6 @@ reservationsMain = ->
         gradeSelect = document.querySelector("#grade_id")
         updateGradeTicketsAll(gradeSelect)
         gradeSelect.addEventListener("change", (e) -> updateGradeTicketsAll(e.target))
-        # document.querySelector(".add_nested_fields_link[data-association-path='reservation_tickets']").addEventListener("click", addTicketListener)
         $(document).on 'fields_added.nested_form_fields', addTicketListener
 
 updateGradeTicketsAll = (gradeSelect) ->

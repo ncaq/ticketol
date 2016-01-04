@@ -5,9 +5,10 @@
 <%= link_to 'Back', reservations_path %>
 
 <script>
- var gradeTickets = [].map.call(<%= raw @grades.map {
-                                |g| g.tickets.map { |ti| [ti.seat, ti.id] }
-                                }.as_json %>,
+ var gradeTickets = [].map.call(<%= raw @grades.map { |g|
+                                g.tickets.where(:reservation_id => nil).map { |ti|
+                                    [ti.seat, ti.id]
+                                }}.as_json %>,
                                 function(gts) {
                                     return [].map.call(gts, function(ti) {
                                         return new Option(ti[0], ti[1]);

@@ -11,16 +11,16 @@
     </div>
   <% end %>
 
-  <%= f.hidden_field :event_id, :value => params[:event_id] %>
+  <%= hidden_field :event, :id, :value => @event.id %>
 
   <div class="field">
-    <%= f.label :concert, 'コンサート' %><br>
-    <%= f.text_field :concert, :readonly => true, :value => @concert.title %>
+    <%= label :concert, 'コンサート' %><br>
+    <%= text_field :concert, :title, :readonly => true, :value => @concert.title %>
   </div>
 
   <div class="field">
-    <%= f.label :event, '会場' %><br>
-    <%= f.text_field :event, :readonly => true, :value => @event.place %>
+    <%= label :event, '会場' %><br>
+    <%= text_field :event, :place, :readonly => true, :value => @event.place %>
   </div>
 
   <div class="field">
@@ -29,11 +29,11 @@
   </div>
 
   <% if @event.lottery %>
-    <%= f.number_field :volume, '購入数' %>
+    <%= number_field :volume, '購入数' %>
   <% else %>
     <%= f.nested_fields_for :tickets do |ticket_f| %>
-      <%= ticket_f.label :seat, '席番号' %>
-      <%= ticket_f.select :seat, [] %>
+      <%= ticket_f.label :id, '席番号' %>
+      <%= ticket_f.select :id, [] %>
     <% end %>
     <%= f.add_nested_fields_link :tickets %>
   <% end %>

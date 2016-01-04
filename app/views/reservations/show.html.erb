@@ -1,4 +1,11 @@
 <p id="notice"><%= notice %></p>
+<p>
+  購入が完了しました.
+</p>
 
-<%= link_to 'Edit', edit_reservation_path(@reservation) %> |
-<%= link_to 'Back', reservations_path %>
+<% if @reservation.convenience? %>
+  <p>
+    あなたのコンビニシステム用受け取り番号は
+    <b><%= @reservation.receive_password %></b>
+    です.
+<% end %>
