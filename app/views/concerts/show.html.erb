@@ -20,5 +20,29 @@
   <%= @concert.user %>
 </p>
 
+<table border=1>
+  <thead>
+    <tr>
+      <th>会場</th>
+      <th>日時</th>
+      <th>販売開始</th>
+      <th>販売終了</th>
+      <th>抽選</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @concert.events.each do |event| %>
+      <tr>
+        <td><%= event.place %></td>
+        <td><%= event.date.strftime("%F %T") %></td>
+        <td><%= event.sell_start.strftime("%F %T") %></td>
+        <td><%= event.sell_end.strftime("%F %T") %></td>
+        <td><%= event.lottery %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 <%= link_to 'Edit', edit_concert_path(@concert) %> |
 <%= link_to 'Back', concerts_path %>
