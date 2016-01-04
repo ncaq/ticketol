@@ -8,7 +8,10 @@ class Event < ActiveRecord::Base
 
   def check_sell_date
     unless sell_start < sell_end && sell_end < date
-      errors.add(:sell_date_exception, '販売開始日時 < 販売終了日時 < 公演日時になっていません.')
+      em = '販売開始日時 < 販売終了日時 < 公演日時になっていません.'
+      errors[:date]       << em
+      errors[:sell_start] << em
+      errors[:sell_end]   << em
     end
   end
 
