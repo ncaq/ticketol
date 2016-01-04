@@ -45,7 +45,7 @@ class ReservationsController < ApplicationController
           respond_to do |format|
             if 0 < tryBuyTickets.length && tryBuyTickets.length == updateSucessLength
               if @reservation.convenience?
-                @reservation.receive_password = SecureRandom.hex(5)
+                @reservation.convenience_password = SecureRandom.hex(5)
                 @reservation.save!
               end
               format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }

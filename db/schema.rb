@@ -67,11 +67,11 @@ ActiveRecord::Schema.define(version: 20160103084552) do
   add_index "grades", ["event_id"], name: "index_grades_on_event_id"
 
   create_table "reservations", force: :cascade do |t|
-    t.integer  "user_id",          null: false
-    t.integer  "payment_method",   null: false
-    t.text     "receive_password"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.integer  "user_id",              null: false
+    t.integer  "payment_method",       null: false
+    t.text     "convenience_password"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   add_index "reservations", ["user_id"], name: "index_reservations_on_user_id"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20160103084552) do
     t.datetime "updated_at",     null: false
   end
 
+  add_index "tickets", ["grade_id", "seat"], name: "index_tickets_on_grade_id_and_seat", unique: true
   add_index "tickets", ["grade_id"], name: "index_tickets_on_grade_id"
   add_index "tickets", ["reservation_id"], name: "index_tickets_on_reservation_id"
 
