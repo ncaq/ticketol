@@ -4,7 +4,7 @@ class Event < ActiveRecord::Base
   has_many :grades
   accepts_nested_attributes_for :grades
 
-  validates :check_sell_date
+  validate :check_sell_date
 
   def check_sell_date
     unless sell_start < sell_end && sell_end < date
