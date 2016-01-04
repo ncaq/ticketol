@@ -5,10 +5,10 @@ class ConcertImagesController < ApplicationController
   # GET /concert_images/1.json
   def show
     allow
-    if @concert_image
+    if @concert_image && @concert_image.data
       send_data @concert_image.data, type: 'image/png', disposition: 'inline'
     else
-      raise NotFound
+      send_data File.open(Rails.root.join('public', 'concert_image_default.png').to_s).read, type: 'image/png', disposition: 'inline'
     end
   end
 

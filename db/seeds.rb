@@ -56,6 +56,9 @@ when "development"
     concert.user_id = User.where(name: 'seller').first.id
     concert.save!
 
+    concert_image = ConcertImage.new
+    concert.concert_image = concert_image
+
     event = Event.new
     event.place = 'hoge'
     event.date       = DateTime.parse('2016-02-10')

@@ -20,12 +20,12 @@ class ConcertsController < ApplicationController
     @concert = Concert.new
     @concert.build_concert_image
     @concert.events.build
-    @concert.events.map do |e|
+    @concert.events.map { |e|
       e.grades.build
-      e.grades.map do |g|
+      e.grades.map { |g|
         g.tickets.build
-      end
-    end
+      }
+    }
   end
 
   # GET /concerts/1/edit
@@ -37,9 +37,9 @@ class ConcertsController < ApplicationController
   # POST /concerts.json
   def create
     write?
-    @concert = Concert.new(concert_params) do |c|
+    @concert = Concert.new(concert_params) { |c|
       c.user_id = current_user.id
-    end
+    }
 
     respond_to do |format|
       if @concert.save
