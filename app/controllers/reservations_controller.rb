@@ -9,22 +9,26 @@ class ReservationsController < ApplicationController
   end
 
   def new
-    if current_user
-      if current_user.buyer?
-        allow
-        @reservation = Reservation.new
-        @reservation.tickets.build
+    if @event.sell_time?
+      if current_user
+        if current_user.buyer?
+          allow
+          @reservation = Reservation.new
+          @reservation.tickets.build
+        else
+          deny
+        end
       else
-        deny
+        allow
+        redirect_to new_user_session_url
       end
     else
-      allow
-      redirect_to new_user_session_url
+      deny
     end
   end
 
   def create
-    if current_user && current_user.buyer?
+    if current_user && current_user.buyer? && @event.sell_time?
       allow
       begin
         unless @event.lottery

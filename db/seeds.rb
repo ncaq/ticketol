@@ -62,7 +62,7 @@ when "development"
     event = Event.new
     event.place = 'hoge'
     event.date       = Time.zone.parse('2016-02-10')
-    event.sell_start = Time.zone.parse('2016-02-01')
+    event.sell_start = Time.zone.parse('2016-01-01')
     event.sell_end   = Time.zone.parse('2016-02-09')
     event.lottery = false
     concert.events = [event]
