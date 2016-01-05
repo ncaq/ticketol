@@ -6,6 +6,8 @@ class Reservation < ActiveRecord::Base
   has_many :tickets
   accepts_nested_attributes_for :tickets
 
+  has_many :lottery_pendings
+
   def lottery(grade_id, volume)
     begin
       if volume == 0
@@ -21,9 +23,11 @@ class Reservation < ActiveRecord::Base
         raise em
       end
 
-      lottery_pending = LotteryPending.create! { |l|
-        l.grade = grade
-        l.reservation = self
+      lottery_pendings = volume.times.map {
+        LotteryPending.create! { |l|
+          l.grade = grade
+          l.reservation = self
+        }
       }
 
       self.save!
@@ -31,7 +35,7 @@ class Reservation < ActiveRecord::Base
     rescue => e
       if self.id
         self.destroy
-        lottery_pending.destroy
+        lottery_pendings.each(&:destroy)
       end
       errors[:base] << 'エラーが発生したので購入はキャンセルされました'
       puts e
@@ -48,32 +52,8 @@ class Reservation < ActiveRecord::Base
       end
 
       ticketsIds = tickets_attributes.to_a.select { |t| not t[1][:_destroy] }.map { |t| t[1][:id] }
+      buy(ticketsIds)
 
-      if ticketsIds != ticketsIds.uniq
-        em = '同じチケットを注文することはできません'
-        self.errors[:base] << em
-        raise em
-      end
-
-      self.save!
-      tryBuyTickets = Ticket.where(id: ticketsIds)
-      updateSucessLength = Ticket.where(id: ticketsIds, reservation_id: nil).
-                           update_all(:reservation_id => self.id)
-
-      if tryBuyTickets.length == updateSucessLength
-        if self.convenience?
-          self.convenience_password = SecureRandom.hex(5)
-          self.save!
-        end
-        return true
-      else
-        em = <<EOS
-指定されたチケットを購入することが出来ませんでした.
-違うチケットでもう一度お試しください.
-EOS
-        errors[:base] << em
-        raise
-      end
     rescue => e
       if self.id
         Ticket.where(reservation_id: self.id).update_all(:reservation_id => nil)
@@ -82,6 +62,37 @@ EOS
       errors[:base] << 'エラーが発生したので購入はキャンセルされました'
       puts e
       return false
+    end
+  end
+
+  def buy(ticketIds)
+    if ticketsIds != ticketsIds.uniq
+      em = '同じチケットを注文することはできません'
+      self.errors[:base] << em
+      raise em
+    end
+
+    self.save!
+    tryBuyTickets = Ticket.where(id: ticketsIds)
+    updateSucessLength = Ticket.where(id: ticketsIds, reservation_id: nil).
+                         update_all(:reservation_id => self.id)
+
+    if tryBuyTickets.length == updateSucessLength
+      if self.convenience?
+        self.convenience_password = SecureRandom.hex(5)
+        self.save!
+      end
+
+      self.lottery_pendings.delete_all
+
+      return true
+    else
+      em = <<EOS
+指定されたチケットを購入することが出来ませんでした.
+違うチケットでもう一度お試しください.
+EOS
+      errors[:base] << em
+      raise
     end
   end
 end

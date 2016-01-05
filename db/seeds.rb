@@ -6,24 +6,33 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-def seat_set(event)
+def create_user(name, role)
+  User.create! { |u|
+    u.email = name + '@example.com'
+    u.name = name
+    u.password = 'hogehoge'
+    u.password_confirmation = u.password
+    u.role = role
+  }
+end
+
+def set_seat(event)
   seat = 100
+  size = 10
   [['s', '10000'], ['a', '5000'], ['b', '2000']].each{ | (name, price) |
     grade = Grade.new
     grade.name = name
     grade.price = price
     event.grades << grade
     grade.save!
-
-    tickets = (seat..seat + 50).map{ |i|
+    tickets = (seat..seat + size).map{ |i|
       ticket = Ticket.new
       ticket.seat = i.to_s
       ticket
     }
     grade.tickets = tickets
     tickets.each(&:save!)
-
-    seat += 50
+    seat += size
   }
 end
 
@@ -42,21 +51,15 @@ when "development"
     p 'export ticketol_admin_password=hogehoge'
   end
 
-  User.create! { |u|
-    u.email = 'buyer@example.com'
-    u.name = 'buyer'
-    u.password = 'hogehoge'
-    u.password_confirmation = u.password
-    u.buyer!
-  }
+  create_user('buyer', 'buyer')
+  create_user('buyer1', 'buyer')
+  create_user('buyer2', 'buyer')
+  create_user('buyer3', 'buyer')
 
-  User.create! { |u|
-    u.email = 'seller@example.com'
-    u.name = 'seller'
-    u.password = 'hogehoge'
-    u.password_confirmation = u.password
-    u.seller!
-  }
+  create_user('seller', 'seller')
+  create_user('seller1', 'seller')
+  create_user('seller2', 'seller')
+  create_user('seller3', 'seller')
 
   concert = Concert.new
   concert.title = 'seed'
@@ -70,36 +73,44 @@ when "development"
   begin
     event = Event.new
     event.place = 'non_lottery_event'
-    event.date       = Time.zone.parse('2016-02-10')
-    event.sell_start = Time.zone.parse('2016-01-01')
-    event.sell_end   = Time.zone.parse('2016-02-09')
+    event.date       = 20.day.from_now
+    event.sell_start = Time.zone.now
+    event.sell_end   = 10.day.from_now
     event.lottery = false
     concert.events << event
     event.save!
-    seat_set(event)
+    set_seat(event)
   end
 
   begin
     event = Event.new
     event.place = 'lottery_event'
-    event.date       = Time.zone.parse('2016-02-10')
-    event.sell_start = Time.zone.parse('2016-01-01')
-    event.sell_end   = Time.zone.parse('2016-02-09')
+    event.date       = 20.day.from_now
+    event.sell_start = Time.zone.now
+    event.sell_end   = 10.day.from_now
     event.lottery = true
     concert.events << event
     event.save!
-    seat_set(event)
+    set_seat(event)
   end
 
   begin
     event = Event.new
     event.place = 'soon_lottery_event'
-    event.date       = Time.zone.parse(10.minute.from_now)
-    event.sell_start = Time.zone.parse(Time.zone.now)
-    event.sell_end   = Time.zone.parse(1.minute.from_now)
+    event.date       = 10.minute.from_now
+    event.sell_start = Time.zone.now
+    event.sell_end   = 10.second.from_now
     event.lottery = true
     concert.events << event
     event.save!
-    seat_set(event)
+    set_seat(event)
+
+    User.buyer.each { |u|
+      res = Reservation.new { |r|
+        r.user = u
+        r.convenience!
+      }
+      res.lottery(event.grades.first.id, 1 + Random.rand(10))
+    }
   end
 end

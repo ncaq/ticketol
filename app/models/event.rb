@@ -15,8 +15,20 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def sell_ok?
+    return sell_time? && self.grades.any? {|g| g.tickets.where(reservation_id: nil).exists? }
+  end
+
   def sell_time?
     now = Time.zone.now
     return sell_start <= now && now <= sell_end
+  end
+
+  after_save :set_lottery_job
+
+  def set_lottery_job
+    if self.lottery
+      LotteryJob.set(wait_until: self.sell_end).perform_later(self)
+    end
   end
 end
