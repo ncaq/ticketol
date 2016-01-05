@@ -12,10 +12,13 @@
     <p class="alert"><%= alert %></p>
 
     <ul>
-      <li>
+      <li class="searchNav">
         <%= link_to "トップ", root_path %>
         <%= link_to "お問い合わせ", new_contact_path %>
         <%= link_to "コンサート一覧", concerts_path %>
+        <%= form_tag(concerts_path, {:method => "get"}) %>
+        <input name="q" type="search"/>
+        <%= submit_tag "コンサート検索"%>
       </li>
       <li>
         <% if user_signed_in? %>

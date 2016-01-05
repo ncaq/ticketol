@@ -5,7 +5,15 @@ class ConcertsController < ApplicationController
   # GET /concerts.json
   def index
     allow
-    @concerts = Concert.all
+    if params[:q]
+      q = params[:q]
+      @concerts = Concert.where(
+        Concert.arel_table[:title].matches("%#{q}%").or(
+        Concert.arel_table[:artist].matches("%#{q}%")
+      )).sort{|c| c.events.any?(&:sell_ok?) ? 0 : 1 }
+    else
+      @concerts = Concert.all
+    end
   end
 
   # GET /concerts/1
