@@ -34,6 +34,9 @@ class ConcertsController < ApplicationController
     write?
     @concert = Concert.new(concert_params) { |c|
       c.user_id = current_user.id
+      if concert_params[:concert_image_attributes].nil?
+        c.concert_image = ConcertImage.new
+      end
     }
 
     respond_to do |format|
