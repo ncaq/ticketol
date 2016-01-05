@@ -28,11 +28,6 @@ class ConcertsController < ApplicationController
     }
   end
 
-  # GET /concerts/1/edit
-  def edit
-    write?
-  end
-
   # POST /concerts
   # POST /concerts.json
   def create
@@ -47,21 +42,6 @@ class ConcertsController < ApplicationController
         format.json { render :show, status: :created, location: @concert }
       else
         format.html { render :new }
-        format.json { render json: @concert.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /concerts/1
-  # PATCH/PUT /concerts/1.json
-  def update
-    write?
-    respond_to do |format|
-      if @concert.update(concert_params)
-        format.html { redirect_to @concert, notice: 'Concert was successfully updated.' }
-        format.json { render :show, status: :ok, location: @concert }
-      else
-        format.html { render :edit }
         format.json { render json: @concert.errors, status: :unprocessable_entity }
       end
     end

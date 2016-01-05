@@ -6,7 +6,7 @@ Rails.application.routes.draw do
              }
 
   resources :concert_images, :only   => [:show]
-  resources :concerts,       :expect => [:destroy]
+  resources :concerts,       :expect => [:update, :edit, :destroy]
   resources :contacts,       :expect => [:destroy]
   resources :events,         :only   => [:show]
   resources :reservations,   :only   => [:show, :new, :create, :destroy]
