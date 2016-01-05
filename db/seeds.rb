@@ -90,4 +90,16 @@ when "development"
     event.save!
     seat_set(event)
   end
+
+  begin
+    event = Event.new
+    event.place = 'soon_lottery_event'
+    event.date       = Time.zone.parse(10.minute.from_now)
+    event.sell_start = Time.zone.parse(Time.zone.now)
+    event.sell_end   = Time.zone.parse(1.minute.from_now)
+    event.lottery = true
+    concert.events << event
+    event.save!
+    seat_set(event)
+  end
 end
