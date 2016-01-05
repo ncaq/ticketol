@@ -27,6 +27,7 @@
           <% when "seller" %>
             <%= link_to "コンサート登録", new_concert_path %> |
           <% end %>
+          <%= link_to "チケット一覧", reservations_path %> |
           <%= link_to "Edit profile", edit_user_registration_path %> |
           <%= link_to "Logout", destroy_user_session_path, method: :delete %>
         <% else %>

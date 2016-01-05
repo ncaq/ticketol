@@ -14,7 +14,7 @@ class LotteryJob < ActiveJob::Base
         elected_reservation = pendings.sample.reservation
         elected_lottery_pendings = elected_reservation.lottery_pendings # 連番
         if elected_lottery_pendings.length <= open_tickets.length
-          elected_reservation.buy(open_tickets.take(10).ids)
+          elected_reservation.buy(open_tickets.take(10).map(&:id))
         elsif open_tickets.length < pendings.group(:reservation_id).count.values.min
           break
         end

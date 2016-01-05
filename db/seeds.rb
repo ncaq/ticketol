@@ -110,7 +110,7 @@ when "development"
         r.user = u
         r.convenience!
       }
-      res.lottery(event.grades.first.id, 1 + Random.rand(10))
+      res.lottery(event.grades.first.id, 1 + Random.rand(3))
     }
   end
 end

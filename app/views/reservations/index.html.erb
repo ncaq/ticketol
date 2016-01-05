@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Reservation</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>concert</th>
+      <th>event</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @reservations.each do |reservation| %>
+      <% event = reservation.event %>
+      <tr>
+        <td><%= event.concert.title %></td>
+        <td><%= event.place %></td>
+        <td><%= link_to 'Show', reservation %></td>
+        <td><%= link_to 'Destroy', reservation, method: :delete,
+            data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

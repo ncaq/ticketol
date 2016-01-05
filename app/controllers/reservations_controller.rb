@@ -2,6 +2,19 @@ class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show]
   before_action :set_event, only: [:new, :create]
 
+  def index
+    allow
+    if current_user.nil?
+      redirect_to new_user_session_url
+    else
+      if current_user.admin?
+        @reservations = Reservation.all
+      else
+        @reservations = Reservation.where(user_id: current_user.id)
+      end
+    end
+  end
+
   # GET /reservations/1
   # GET /reservations/1.json
   def show

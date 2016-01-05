@@ -8,6 +8,14 @@ class Reservation < ActiveRecord::Base
 
   has_many :lottery_pendings
 
+  def event
+    if self.tickets.empty?
+      self.lottery_pendings.first.grade.event
+    else
+      self.tickets.first.grade.event
+    end
+  end
+
   def lottery(grade_id, volume)
     begin
       if volume == 0
@@ -51,8 +59,8 @@ class Reservation < ActiveRecord::Base
         raise em
       end
 
-      ticketsIds = tickets_attributes.to_a.select { |t| not t[1][:_destroy] }.map { |t| t[1][:id] }
-      buy(ticketsIds)
+      ticketIds = tickets_attributes.to_a.select { |t| not t[1][:_destroy] }.map { |t| t[1][:id] }
+      buy(ticketIds)
 
     rescue => e
       if self.id
@@ -66,15 +74,15 @@ class Reservation < ActiveRecord::Base
   end
 
   def buy(ticketIds)
-    if ticketsIds != ticketsIds.uniq
+    if ticketIds != ticketIds.uniq
       em = '同じチケットを注文することはできません'
       self.errors[:base] << em
       raise em
     end
 
     self.save!
-    tryBuyTickets = Ticket.where(id: ticketsIds)
-    updateSucessLength = Ticket.where(id: ticketsIds, reservation_id: nil).
+    tryBuyTickets = Ticket.where(id: ticketIds)
+    updateSucessLength = Ticket.where(id: ticketIds, reservation_id: nil).
                          update_all(:reservation_id => self.id)
 
     if tryBuyTickets.length == updateSucessLength
@@ -82,9 +90,6 @@ class Reservation < ActiveRecord::Base
         self.convenience_password = SecureRandom.hex(5)
         self.save!
       end
-
-      self.lottery_pendings.delete_all
-
       return true
     else
       em = <<EOS
