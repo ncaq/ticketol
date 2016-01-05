@@ -40,17 +40,23 @@
 
     <%= event_f.nested_fields_for :grades do |grade_f| %>
       <%= grade_f.label :name, "ブロック名" %>
-      <%= grade_f.text_field :name %><br />
+      <%= grade_f.text_field :name %></br>
       <%= grade_f.label :price, "価格" %>
-      <%= grade_f.text_field :price %><br />
+      <%= grade_f.text_field :price %></br>
 
-      <%= grade_f.nested_fields_for :tickets do |ticket_f| %>
-        <%= ticket_f.label :seat, "席番号" %>
-        <%= ticket_f.text_field :seat %><br />
+      <%= grade_f.label :tickets, "席番号" %>
+      <%= grade_f.nested_fields_for :tickets, wrapper_tag: :span do |ticket_f| %>
+        <%= ticket_f.text_field :seat %>
       <% end %>
+      <br>
       <%= grade_f.add_nested_fields_link :tickets %>
+      <button class=".clearTicket" type="reset" onclick="clearTicket(event)">clear</button>
     <% end %>
     <%= event_f.add_nested_fields_link :grades %>
+    <label>
+      CSV(UTF-8)からインポートする
+      <input type="file" class=".importGradeTicket" form ="null" accept="text/comma-separated-values" onchange="importGradeTicket(event)"></input>
+    </label>
   <% end %>
   <%= f.add_nested_fields_link :events %>
 

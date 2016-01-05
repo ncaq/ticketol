@@ -3,10 +3,13 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 reservationsMain = ->
+        setGradeTicketsEvent
+
+setGradeTicketsEvent = ->
         gradeSelect = document.querySelector("#grade_id")
         updateGradeTicketsAll(gradeSelect)
         gradeSelect.addEventListener("change", (e) -> updateGradeTicketsAll(e.target))
-        $(document).on 'fields_added.nested_form_fields', addTicketListener
+        $(document).on "fields_added.nested_form_fields", addTicketListener
 
 updateGradeTicketsAll = (gradeSelect) ->
         ticketSelects = document.querySelectorAll(".nested_reservation_tickets select")
