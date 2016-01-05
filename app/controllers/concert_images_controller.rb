@@ -8,7 +8,7 @@ class ConcertImagesController < ApplicationController
     if @concert_image && @concert_image.data
       send_data @concert_image.data, type: 'image/png', disposition: 'inline'
     else
-      send_data File.open(Rails.root.join('public', 'concert_image_default.png').to_s).read, type: 'image/png', disposition: 'inline'
+      send_data File.open(Rails.root.join('app', 'assets', 'images', 'concert_image_default.png').to_s).read, type: 'image/png', disposition: 'inline'
     end
   end
 
