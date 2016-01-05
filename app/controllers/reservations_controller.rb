@@ -34,7 +34,18 @@ class ReservationsController < ApplicationController
       @reservation.user_id = current_user.id
       @reservation.payment_method = reservation_params[:payment_method]
       if @event.lottery
-
+        respond_to do |format|
+          if @reservation.lottery(params[:grade][:id], params[:volume])
+            format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }
+            format.json { render :show, status: :created, location: @reservation }
+          else
+            format.html {
+              params[:event][:id] = @event.id
+              render :new
+            }
+            format.json { render json: @reservation.errors, status: :unprocessable_entity }
+          end
+        end
       else
         respond_to do |format|
           if @reservation.notLottery(reservation_params[:tickets_attributes])

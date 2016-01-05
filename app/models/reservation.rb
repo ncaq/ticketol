@@ -6,6 +6,39 @@ class Reservation < ActiveRecord::Base
   has_many :tickets
   accepts_nested_attributes_for :tickets
 
+  def lottery(grade_id, volume)
+    begin
+      if volume == 0
+        em = 'チケットを指定してください'
+        self.errors[:base] << em
+        raise em
+      end
+
+      grade = Grade.find(grade_id)
+      unless grade
+        em = '席グレードが不正です'
+        self.errors[:base] << em
+        raise em
+      end
+
+      lottery_pending = LotteryPending.create! { |l|
+        l.grade = grade
+        l.reservation = self
+      }
+
+      self.save!
+
+    rescue => e
+      if self.id
+        self.destroy
+        lottery_pending.destroy
+      end
+      errors[:base] << 'エラーが発生したので購入はキャンセルされました'
+      puts e
+      return false
+    end
+  end
+
   def notLottery(tickets_attributes)
     begin
       unless tickets_attributes
@@ -14,7 +47,7 @@ class Reservation < ActiveRecord::Base
         raise em
       end
 
-      ticketsIds = tickets_attributes.to_a.select { |t| not t[1][:_destroy]}.map { |t| t[1][:id] }
+      ticketsIds = tickets_attributes.to_a.select { |t| not t[1][:_destroy] }.map { |t| t[1][:id] }
 
       if ticketsIds != ticketsIds.uniq
         em = '同じチケットを注文することはできません'

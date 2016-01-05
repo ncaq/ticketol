@@ -29,7 +29,8 @@
   </div>
 
   <% if @event.lottery %>
-    <%= number_field :volume, '購入数' %>
+    <%= label :volume, '購入数' %>
+    <%= number_field :volume, '購入数', value: 1 %>
   <% else %>
     <%= f.nested_fields_for :tickets do |ticket_f| %>
       <%= ticket_f.label :id, '席番号' %>

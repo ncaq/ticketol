@@ -3,9 +3,14 @@
   購入が完了しました.
 </p>
 
-<% if @reservation.convenience? %>
-  <p>
-    あなたのコンビニシステム用受け取り番号は
-    <b><%= @reservation.convenience_password %></b>
-    です.
+<% if @event.lottery %>
+  当選をお待ちください.
+<% else %>
+  <% if @reservation.convenience? %>
+    <p>
+      あなたのコンビニシステム用受け取り番号は
+      <b><%= @reservation.convenience_password %></b>
+      です.
+    </p>
+  <% end %>
 <% end %>
