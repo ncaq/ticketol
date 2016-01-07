@@ -19,6 +19,7 @@ class LotteryJob < ActiveJob::Base
           break
         end
       end
+      grade.lottery_pendings.destroy_all
     }
   end
 end
