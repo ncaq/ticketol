@@ -1,5 +1,5 @@
 class ReservationsController < ApplicationController
-  before_action :set_reservation, only: [:show, :destroy]
+  before_action :set_reservation, only: [:show]
 
   def index
     allow
@@ -63,16 +63,6 @@ class ReservationsController < ApplicationController
           format.json { render json: reservation.errors, status: :unprocessable_entity }
         end
       end
-    else
-      deny
-    end
-  end
-
-  def destroy
-    if has? && !@reservation.event.sell_end?
-      allow
-      self.lottery_pendings.delete_all
-      self.destroy
     else
       deny
     end

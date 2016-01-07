@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :concerts,       :expect => [:update, :edit, :destroy]
   resources :contacts,       :expect => [:destroy]
   resources :events,         :only   => [:show]
-  resources :reservations,   :only   => [:index, :show, :new, :create, :destroy]
+  resources :reservations,   :only   => [:index, :show, :new, :create]
   resources :users,          :only   => [:index, :show]
 
   # The priority is based upon order of creation: first created -> highest priority.
