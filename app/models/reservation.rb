@@ -16,7 +16,7 @@ class Reservation < ActiveRecord::Base
     end
   end
 
-  def lottery(grade_id, volume)
+  def lottery(grade, volume)
     begin
       if volume == 0
         em = 'チケットを指定してください'
@@ -24,7 +24,6 @@ class Reservation < ActiveRecord::Base
         raise em
       end
 
-      grade = Grade.find(grade_id)
       unless grade
         em = '席グレードが不正です'
         self.errors[:base] << em

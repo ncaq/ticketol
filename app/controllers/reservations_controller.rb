@@ -1,6 +1,5 @@
 class ReservationsController < ApplicationController
-  before_action :set_reservation, only: [:show]
-  before_action :set_event, only: [:new, :create]
+  before_action :set_reservation, only: [:show, :destroy]
 
   def index
     allow
@@ -22,6 +21,9 @@ class ReservationsController < ApplicationController
   end
 
   def new
+    @event = Event.find(params[:event][:id])
+    @grades = @event.grades
+    @concert = @event.concert
     if @event.sell_time?
       if current_user
         if current_user.buyer?
@@ -41,36 +43,24 @@ class ReservationsController < ApplicationController
   end
 
   def create
-    if current_user && current_user.buyer? && @event.sell_time?
+    reservation = Reservation.new
+    reservation.user_id = current_user.id
+    reservation.payment_method = reservation_params[:payment_method]
+    grade = Grade.find(reservation_params[:grade][:id])
+    event = grade.event
+    volume = reservation_params[:volume]
+    if current_user && current_user.buyer? && event.sell_time?
       allow
-      @reservation = Reservation.new()
-      @reservation.user_id = current_user.id
-      @reservation.payment_method = reservation_params[:payment_method]
-      if @event.lottery
-        respond_to do |format|
-          if @reservation.lottery(params[:grade][:id], params[:volume])
-            format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }
-            format.json { render :show, status: :created, location: @reservation }
-          else
-            format.html {
-              params[:event][:id] = @event.id
-              render :new
-            }
-            format.json { render json: @reservation.errors, status: :unprocessable_entity }
-          end
-        end
-      else
-        respond_to do |format|
-          if @reservation.notLottery(reservation_params[:tickets_attributes])
-            format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }
-            format.json { render :show, status: :created, location: @reservation }
-          else
-            format.html {
-              params[:event][:id] = @event.id
-              render :new
-            }
-            format.json { render json: @reservation.errors, status: :unprocessable_entity }
-          end
+      respond_to do |format|
+        if @event.lottery ? reservation.lottery(grade, volume) : reservation.notLottery(reservation_params[:tickets_attributes])
+          format.html { redirect_to reservation, notice: 'Reservation was successfully created.' }
+          format.json { render :show, status: :created, location: reservation }
+        else
+          format.html {
+            params[:event][:id] = event.id
+            render :new
+          }
+          format.json { render json: reservation.errors, status: :unprocessable_entity }
         end
       end
     else
@@ -79,26 +69,25 @@ class ReservationsController < ApplicationController
   end
 
   def destroy
-    has?
+    if has? && !@reservation.event.sell_end?
+      allow
+      self.lottery_pendings.delete_all
+      self.destroy
+    else
+      deny
+    end
   end
 
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_reservation
     @reservation = Reservation.find(params[:id])
-  end
-
-  def set_event
-    event_id = params[:event_id] || params[:event][:id]
-    @event = Event.find(event_id)
-    @concert = @event.concert
-    @grades = @event.grades
+    @event = @reservation.event
   end
 
   def reservation_params
-    params.require(:reservation).
-      permit(:payment_method,
-             tickets_attributes: [:id, :_destroy] )
+    params.require(:reservation).permit(:payment_method, tickets_attributes: [:id, :_destroy] )
+    params.permit(grade: [:id])
   end
 
   def has?
