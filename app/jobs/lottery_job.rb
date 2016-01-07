@@ -7,10 +7,10 @@ class LotteryJob < ActiveJob::Base
     grades.each { |grade|
       while true
         open_tickets = grade.tickets.where(reservation_id: nil)
-        if open_tickets.empty?
+        pendings = grade.lottery_pendings
+        if open_tickets.empty? || pendings.empty?
           break
         end
-        pendings = grade.lottery_pendings
         elected_reservation = pendings.sample.reservation
         elected_lottery_pendings = elected_reservation.lottery_pendings # 連番
         if elected_lottery_pendings.length <= open_tickets.length
