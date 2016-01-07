@@ -41,7 +41,7 @@
         <td><%= event.sell_end.strftime("%F %T") %></td>
         <td><%= event.lottery %></td>
         <% if event.sell_ok? %>
-          <td><%= link_to 'buy', new_reservation_path(:event_id => event.id), :target => '_blank' %></td>
+          <td><%= link_to 'buy', new_reservation_path(:event => {:id => event.id}), :target => '_blank' %></td>
         <% else %>
           <td></td>
         <% end %>
