@@ -1,3 +1,7 @@
+@clearTicket = (e) ->
+        [].forEach.call(e.target.parentNode.querySelectorAll("span.nested_fields[class$=_tickets] input"),
+                (i) -> i.parentNode.removeChild(i))
+
 @importGradeTicket = (e) ->
         root = e.target.parentNode.parentNode
         file = e.target.files[0]
