@@ -89,6 +89,7 @@ class Reservation < ActiveRecord::Base
         self.convenience_password = SecureRandom.hex(5)
         self.save!
       end
+      self.lottery_pendings.destroy_all
       return true
     else
       em = <<EOS
