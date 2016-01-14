@@ -5,18 +5,24 @@
 <table>
   <thead>
     <tr>
+      <td>email</td>
+      <td>name</td>
+      <td>role</td>
+      <td>suspend</td>
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @users.each do |user| %>
-    <tr>
-      <td><%= user.email %></td>
-      <td><%= link_to 'Show', user %></td>
-      <td><%= link_to 'Edit', edit_user_registration_path(user) %></td>
-      <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
+      <tr <% if user.suspend %> class="suspend" <% end %>>
+        <td><%= user.email %></td>
+        <td><%= user.name %></td>
+        <td><%= user.role %></td>
+        <td><%= user.suspend %></td>
+        <td><%= link_to 'Show', user %></td>
+        <td><%= link_to 'Edit', edit_user_registration_path(user) %></td>
+      </tr>
     <% end %>
   </tbody>
 </table>

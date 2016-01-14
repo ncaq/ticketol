@@ -5,12 +5,14 @@ Rails.application.routes.draw do
                registrations: 'users/registrations'
              }
 
-  resources :concert_images, :only   => [:show]
-  resources :concerts,       :expect => [:update, :edit, :destroy]
+  resources :users,          :only => [:index, :show, :edit, :update]
+
+  resources :concert_images, :only => [:show]
+  resources :concerts,       :only => [:index, :show, :new, :create]
+  resources :events,         :only => [:show]
+  resources :reservations,   :only => [:index, :show, :new, :create]
+
   resources :contacts,       :expect => [:destroy]
-  resources :events,         :only   => [:show]
-  resources :reservations,   :only   => [:index, :show, :new, :create]
-  resources :users,          :only   => [:index, :show]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -13,6 +13,7 @@ def create_user(name, role)
     u.password = 'hogehoge'
     u.password_confirmation = u.password
     u.role = role
+    yield u if block_given?
   }
 end
 
@@ -60,6 +61,10 @@ when "development"
   create_user('seller1', 'seller')
   create_user('seller2', 'seller')
   create_user('seller3', 'seller')
+
+  create_user('suspend', 'admin') { |u|
+    u.suspend = true
+  }
 
   concert = Concert.new
   concert.title = 'seed'

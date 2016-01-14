@@ -5,4 +5,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   enum role: [:buyer, :seller_pending, :seller, :admin]
+
+  def active_for_authentication?
+    !self.suspend
+  end
 end
