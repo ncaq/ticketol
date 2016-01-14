@@ -18,9 +18,9 @@
         <%= link_to "コンサート一覧", concerts_path %>
         <!-- device conflict -->
         <% unless controller.class.ancestors.include?(DeviseController) %>
-          <%= form_tag(concerts_path, {:method => "get"}) %>
-          <input name="q" type="search"/>
-          <%= submit_tag "コンサート検索"%>
+          <%#= form_tag(concerts_path, {:method => "get"}) %>
+          <!-- <input name="q" type="search"/> -->
+          <%#= submit_tag "コンサート検索"%>
         <% end %>
       </li>
       <li>
