@@ -1,2 +1,20 @@
 <h1>Top#show</h1>
-<p>Find me in app/views/top/show.html.erb</p>
+
+<article>
+  <h1>新着コンサート</h1>
+  <ul>
+    <% @concerts.each do |concert| %>
+      <li>
+        <figure>
+          <%= image_tag concert_image_path(concert.concert_image) %>
+          <figcaption>
+            <%= concert.title %>
+            <%= concert.artist %>
+            <%= concert.user.email %>
+            <%= link_to 'Show', concert %>
+          </figcaption>
+        </figure>
+      </li>
+    <% end %>
+  </ul>
+</article>
