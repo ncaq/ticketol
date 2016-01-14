@@ -7,11 +7,15 @@ class Event < ActiveRecord::Base
   validate :check_sell_date
 
   def check_sell_date
-    unless sell_start < sell_end && sell_end < date
-      em = '販売開始日時 < 販売終了日時 < 公演日時になっていません.'
-      errors[:date]       << em
-      errors[:sell_start] << em
-      errors[:sell_end]   << em
+    begin
+      unless sell_start < sell_end && sell_end < date
+        em = '販売開始日時 < 販売終了日時 < 公演日時になっていません.'
+        errors[:date]       << em
+        errors[:sell_start] << em
+        errors[:sell_end]   << em
+      end
+    rescue
+      erros[:base] = '不明なエラー'
     end
   end
 
