@@ -175,15 +175,15 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   byebug
-  coffee-rails (= 4.1.0)
+  coffee-rails
   daemons
   delayed_job_active_record
-  devise (= 3.5.2)
+  devise (~> 3.5.2)
   jbuilder (~> 2.0)
   jquery-rails
   nested_form_fields
   pry-rails
-  rails (= 4.2.5)
+  rails (~> 4.2.5)
   rails-erd
   sass
   sass-rails (~> 5.0)
