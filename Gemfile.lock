@@ -41,7 +41,6 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
-    byebug (8.2.1)
     choice (0.2.0)
     coderay (1.1.0)
     coffee-rails (4.1.0)
@@ -52,7 +51,6 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.0)
-    daemons (1.2.3)
     debug_inspector (0.0.2)
     delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
@@ -172,9 +170,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
-  byebug
   coffee-rails
-  daemons
   delayed_job_active_record
   devise (~> 3.5.2)
   jbuilder (~> 2.0)
