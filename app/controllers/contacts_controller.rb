@@ -20,8 +20,12 @@ class ContactsController < ApplicationController
 
   # GET /contacts/new
   def new
-    allow
-    @contact = Contact.new
+    if current_user
+      allow
+      @contact = Contact.new
+    else
+      deny
+    end
   end
 
   # GET /contacts/1/edit
