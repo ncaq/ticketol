@@ -16,13 +16,9 @@
         <%= link_to "トップ", root_path %>
         <%= link_to "お問い合わせ", new_contact_path %>
         <%= link_to "コンサート一覧", concerts_path %>
-        <% unless controller.class.ancestors.include?(DeviseController) %>
-          <%= form_tag(concerts_path, {:method => "get"}) do |f| %>
-            <%= search_field_tag :q %>
-            <%= submit_tag "コンサート検索"%>
-          <% end %>
-        <% else %>
-          <!-- device conflict -->
+        <%= form_tag(concerts_path, {:method => "get"}) do |f| %>
+          <%= search_field_tag :q %>
+          <%= submit_tag "コンサート検索"%>
         <% end %>
       </li>
       <li>
