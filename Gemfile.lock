@@ -154,8 +154,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.2)
-    turbolinks (2.5.3)
-      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -183,7 +181,7 @@ DEPENDENCIES
   jquery-rails
   nested_form_fields
   pry-rails
-  rails (~> 4.2.5)
+  rails (= 4.2.5)
   rails-erd
   sass
   sass-rails (~> 5.0)
@@ -191,7 +189,6 @@ DEPENDENCIES
   spring
   sqlite3
   tilt
-  turbolinks
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
 
