@@ -72,9 +72,6 @@ when "development"
   concert.user_id = User.where(name: 'seller').first.id
   concert.save!
 
-  concert_image = ConcertImage.new
-  concert.concert_image = concert_image
-
   begin
     event = Event.new
     event.place = 'non_lottery_event'
@@ -110,12 +107,12 @@ when "development"
     event.save!
     set_seat(event)
 
-    User.buyer.each { |u|
-      res = Reservation.new { |r|
-        r.user = u
-        r.convenience!
-      }
-      res.lottery(event.grades.first, 1 + Random.rand(3))
-    }
+    # User.buyer.each { |u|
+    #   res = Reservation.new { |r|
+    #     r.user = u
+    #     r.convenience!
+    #   }
+    #   res.lottery(event.grades.first, 1 + Random.rand(3))
+    # }
   end
 end

@@ -6,7 +6,7 @@
     <% @concerts.each do |concert| %>
       <li>
         <figure>
-          <%= image_tag concert_image_path(concert.concert_image) %>
+          <%= image_tag image_concert_path(concert) %>
           <figcaption>
             <%= concert.title %>
             <%= concert.artist %>

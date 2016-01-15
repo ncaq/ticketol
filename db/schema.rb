@@ -13,19 +13,11 @@
 
 ActiveRecord::Schema.define(version: 20160105092452) do
 
-  create_table "concert_images", force: :cascade do |t|
-    t.integer  "concert_id"
-    t.binary   "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "concert_images", ["concert_id"], name: "index_concert_images_on_concert_id"
-
   create_table "concerts", force: :cascade do |t|
+    t.integer  "user_id",    null: false
     t.text     "title",      null: false
     t.text     "artist",     null: false
-    t.integer  "user_id",    null: false
+    t.binary   "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -64,12 +56,13 @@ ActiveRecord::Schema.define(version: 20160105092452) do
     t.text     "place",      null: false
     t.datetime "date",       null: false
     t.datetime "sell_start", null: false
-    t.datetime "sell_end"
+    t.datetime "sell_end",   null: false
     t.boolean  "lottery",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_index "events", ["concert_id", "place", "date"], name: "index_events_on_concert_id_and_place_and_date", unique: true
   add_index "events", ["concert_id"], name: "index_events_on_concert_id"
 
   create_table "grades", force: :cascade do |t|
@@ -80,26 +73,21 @@ ActiveRecord::Schema.define(version: 20160105092452) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "grades", ["event_id", "name"], name: "index_grades_on_event_id_and_name", unique: true
   add_index "grades", ["event_id"], name: "index_grades_on_event_id"
 
-  create_table "lottery_pendings", force: :cascade do |t|
-    t.integer  "reservation_id"
-    t.integer  "grade_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
-  add_index "lottery_pendings", ["grade_id"], name: "index_lottery_pendings_on_grade_id"
-  add_index "lottery_pendings", ["reservation_id"], name: "index_lottery_pendings_on_reservation_id"
-
   create_table "reservations", force: :cascade do |t|
-    t.integer  "user_id",              null: false
-    t.integer  "payment_method",       null: false
-    t.text     "convenience_password"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "user_id",                          null: false
+    t.integer  "grade_id",                         null: false
+    t.integer  "buy_state",            default: 0, null: false
+    t.integer  "payment_method",                   null: false
+    t.text     "convenience_password",             null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
+  add_index "reservations", ["convenience_password"], name: "index_reservations_on_convenience_password", unique: true
+  add_index "reservations", ["grade_id"], name: "index_reservations_on_grade_id"
   add_index "reservations", ["user_id"], name: "index_reservations_on_user_id"
 
   create_table "tickets", force: :cascade do |t|
@@ -126,7 +114,7 @@ ActiveRecord::Schema.define(version: 20160105092452) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "name",                   default: "",    null: false
-    t.integer  "role",                   default: 0,     null: false
+    t.integer  "role",                                   null: false
     t.boolean  "suspend",                default: false, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
