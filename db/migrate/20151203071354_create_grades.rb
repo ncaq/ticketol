@@ -7,5 +7,6 @@ class CreateGrades < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :grades, [:event_id, :name], unique: true
   end
 end

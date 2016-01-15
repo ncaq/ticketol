@@ -32,7 +32,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
 
       ## Ticketol column
       t.string :name, null: false, default: ""
-      t.column :role, :integer, null: false, default: 0
+      t.integer :role, null: false
 
       t.boolean :suspend, null: false, default: false
 
