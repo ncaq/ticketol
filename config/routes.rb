@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :users,          :only => [:index, :show, :edit, :update]
 
   resources :concert_images, :only => [:show]
-  resources :concerts,       :only => [:index, :show, :new, :create]
+  resources :concerts,       :only => [:index, :show, :new, :create, :edit, :update]
   resources :events,         :only => [:show]
   resources :reservations,   :only => [:index, :show, :new, :create]
 
