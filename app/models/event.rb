@@ -4,32 +4,24 @@ class Event < ActiveRecord::Base
   has_many :grades
   accepts_nested_attributes_for :grades
 
-  validate :check_sell_date
-
-  def check_sell_date
-    begin
-      unless sell_start < sell_end && sell_end < date
-        em = '販売開始日時 < 販売終了日時 < 公演日時になっていません.'
-        errors[:date]       << em
-        errors[:sell_start] << em
-        errors[:sell_end]   << em
-      end
-    rescue
-      erros[:base] = '不明なエラー'
-    end
-  end
-
   def sell_ok?
-    return sell_time? && self.grades.any? {|g| g.tickets.where(reservation_id: nil).exists? }
-  end
-
-  def sell_end?
-    return sell_end < Time.zone.now
+    self.sell_time? && self.grades.any?{ |g| g.tickets.inventory.exists? }
   end
 
   def sell_time?
-    now = Time.zone.now
-    return sell_start <= now && now <= sell_end
+    self.sell_start? && !self.sell_end?
+  end
+
+  def sell_start?
+    self.sell_start < Time.zone.now
+  end
+
+  def sell_end?
+    self.sell_end < Time.zone.now
+  end
+
+  def grade_ticket_tree
+    self.grades.map{ |g| g.tickets.inventory.map{ |t| [t.seat, t.id] } }
   end
 
   after_create :set_lottery_job
