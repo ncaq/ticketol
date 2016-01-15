@@ -1,8 +1,8 @@
+# coding: utf-8
 class ConcertsController < ApplicationController
   before_action :set_concert, only: [:show, :edit, :update]
 
   # GET /concerts
-  # GET /concerts.json
   def index
     allow
     if params[:q]
@@ -17,7 +17,6 @@ class ConcertsController < ApplicationController
   end
 
   # GET /concerts/1
-  # GET /concerts/1.json
   def show
     allow
   end
@@ -37,7 +36,6 @@ class ConcertsController < ApplicationController
   end
 
   # POST /concerts
-  # POST /concerts.json
   def create
     write?
     @concert = Concert.new(concert_params) { |c|
@@ -50,10 +48,8 @@ class ConcertsController < ApplicationController
     respond_to do |format|
       if @concert.save
         format.html { redirect_to @concert, notice: 'Concert was successfully created.' }
-        format.json { render :show, status: :created, location: @concert }
       else
         format.html { render :new }
-        format.json { render json: @concert.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -2,14 +2,12 @@ class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :edit, :update]
 
   # GET /contacts
-  # GET /contacts.json
   def index
     allow
     @contacts = can_contact_all
   end
 
   # GET /contacts/1
-  # GET /contacts/1.json
   def show
     if current_user && current_user.id == @contact.user_id || current_user.admin?
       allow
@@ -38,36 +36,28 @@ class ContactsController < ApplicationController
   end
 
   # POST /contacts
-  # POST /contacts.json
   def create
     allow
-    @contact = Contact.new(contact_params) do |c|
-      c.user_id = current_user.id
-    end
+    @contact = Contact.new(contact_params, user_id: current_user.id)
 
     respond_to do |format|
       if @contact.save
         format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
-        format.json { render :show, status: :created, location: @contact }
       else
         format.html { render :new }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # PATCH/PUT /contacts/1
-  # PATCH/PUT /contacts/1.json
   def update
     if current_user && current_user.admin?
       allow
       respond_to do |format|
         if @contact.update(contact_params)
           format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
-          format.json { render :show, status: :ok, location: @contact }
         else
           format.html { render :edit }
-          format.json { render json: @contact.errors, status: :unprocessable_entity }
         end
       end
     else
