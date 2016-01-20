@@ -34,7 +34,12 @@ class ReservationsController < ApplicationController
     else
       if @event.sell_time? && current_user.buyer?
         allow
-        @reservation_form = @event.lottery ? ReservationFormEnableLottery.new : ReservationFormDisableLottery.new
+        if @event.lottery
+          @reservation_form = ReservationFormEnableLottery.new
+        else
+          @reservation_form = ReservationFormDisableLottery.new
+          @reservation_form.tickets.build
+        end
       else
         deny
       end

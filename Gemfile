@@ -20,6 +20,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 
 gem "active_attr"
+gem 'activemodel-associations'
 gem 'delayed_job_active_record'
 gem 'devise', '~> 3.5.2'
 gem 'nested_form_fields'

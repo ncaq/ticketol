@@ -11,9 +11,12 @@
 <% else %>
   <%= simple_form_for(@reservation_form, url: :reservations) do |f| %>
     <%= select :grade, :id, @event.grades.map{|g| [g.name + '(' + g.price.to_s + '円)', g.id]}, label: '席グレード' %>
-    <%= f.input :tickets_id, collection: @event.grade_ticket.first[:tickets], include_blank: false,
-    :input_html => { :id => '', :name => 'reservation_form_disable_lottery[tickets_id][1]', :class => 'tickets_id'} %>
-    <%= f.button :button, 'チケット追加', type: 'button', class: 'addTicket' %>
+    <%= f.nested_fields_for :tickets do |ticket_f| %>
+      <%= ticket_f.label :id, '席番号' %>
+      <%= ticket_f.select :id, [] %>
+      <%= ticket_f.remove_nested_fields_link %>
+    <% end %>
+    <%= f.add_nested_fields_link :tickets %>
     <%= f.input :payment_method, label: '支払い方法', collection: Reservation.payment_methods, include_blank: false %>
     <%= f.submit '購入' %>
   <% end %>

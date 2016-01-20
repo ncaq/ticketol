@@ -1,7 +1,8 @@
 # coding: utf-8
 class ReservationFormEnableLottery < ReservationForm
-  include ActiveModel::Model
+  include ActiveAttr::Model
   include ActiveAttr::TypecastedAttributes
+  include ActiveModel::Associations
 
   attribute :grade_id, :type => Integer
   attribute :volume, :type => Integer

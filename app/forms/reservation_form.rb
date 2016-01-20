@@ -1,7 +1,8 @@
 # coding: utf-8
 class ReservationForm
-  include ActiveModel::Model
+  include ActiveAttr::Model
   include ActiveAttr::TypecastedAttributes
+  include ActiveModel::Associations
 
   attribute :user_id, :type => Integer
   attribute :payment_method, :type => Integer
