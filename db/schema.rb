@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20160105092452) do
   create_table "reservations", force: :cascade do |t|
     t.integer  "user_id",                          null: false
     t.integer  "grade_id",                         null: false
+    t.integer  "volume",                           null: false
     t.integer  "buy_state",            default: 0, null: false
     t.integer  "payment_method",                   null: false
     t.text     "convenience_password",             null: false
