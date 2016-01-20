@@ -7,16 +7,14 @@ gradeTicket = [].reduce.call(JSON.parse(document.querySelector("#grade_ticket").
         {})
 
 reservationsMain = ->
-        gradeSelect = document.querySelector("select[name$='[grade_id]']")
-        updateGradeTicketsAll(gradeSelect)
-        gradeSelect.addEventListener("change", (e) -> updateGradeTicketsAll(e.target))
+        g = gradeSelect()
+        updateGradeTicketsAll(g)
+        g.addEventListener("change", (e) -> updateGradeTicketsAll(e.target))
         $(document).on("fields_added.nested_form_fields", addTicketListener)
 
 updateGradeTicketsAll = (gradeSelect) ->
         [].forEach.call(ticketSelects(), (ticketSelect) ->
                 updateGradeTickets(gradeSelect, ticketSelect))
-
-ticketSelects = () -> document.querySelectorAll("fieldset.nested_fields[class$=_tickets] select")
 
 updateGradeTickets = (gradeSelect, ticketSelect) ->
         [].forEach.call(ticketSelect.querySelectorAll("option"), (o) ->
@@ -25,9 +23,12 @@ updateGradeTickets = (gradeSelect, ticketSelect) ->
                 ticketSelect.appendChild(o.cloneNode(true)))
 
 addTicketListener = (e) ->
-        gradeSelect = document.querySelector("#grade_id")
-        selects = ticketSelects()
-        lastSelect = selects[selects.length - 1]
-        updateGradeTickets(gradeSelect, lastSelect)
+        g = gradeSelect()
+        t = ticketSelects()
+        lastSelect = t[t.length - 1]
+        updateGradeTickets(g, lastSelect)
+
+gradeSelect = () -> document.querySelector("select[name$='[grade_id]']")
+ticketSelects = () -> document.querySelectorAll("fieldset.nested_fields[class$=_tickets] select")
 
 window.addEventListener("load", reservationsMain)
