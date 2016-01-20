@@ -6,6 +6,12 @@ module ReservationForm
       include ActiveAttr::TypecastedAttributes
       include ActiveModel::Associations
 
+      def record_save
+        self.valid?
+        record = Reservation.new()
+        return record.from_form(self) ? record : false
+      end
+
       def [](attr)
         self.send(attr)
       end
@@ -35,12 +41,6 @@ module ReservationForm
       end
 
       validates :payment_method, numericality: { only_integer: true }, inclusion: { in: Reservation.payment_methods.values }
-
-      def record_save
-        self.valid?
-        record = Reservation.new()
-        return record.from_form(self) ? record : false
-      end
     }
   end
 end

@@ -2,6 +2,25 @@
 class ReservationFormDisableLottery
   include ReservationForm
 
+  def initialize(attributes = {}, options = {})
+    super
+    if attributes != {}
+      self.ticket_ids = attributes[:tickets_attributes].map{ |t| t[1][:id].to_i }
+    end
+  end
+
+  def record_save
+    begin
+      self.valid?
+      record = Reservation.new()
+      return record.from_form(self) ? record : false
+    rescue => e
+      puts e
+      errors[:base] = '購入できませんでした,もう一度やり直してください'
+      return false
+    end
+  end
+
   attr_accessor :ticket_ids
   has_many :tickets
 
@@ -21,13 +40,6 @@ class ReservationFormDisableLottery
   def validate_disable_lottery
     if self.grade.event.lottery
       error[:grade_id] = '購入対象が不正です'
-    end
-  end
-
-  def initialize(attributes = {}, options = {})
-    super
-    if attributes != {}
-      self.ticket_ids = attributes[:tickets_attributes].map{ |t| t[1][:id].to_i }
     end
   end
 end
