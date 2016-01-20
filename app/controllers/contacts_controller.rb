@@ -38,7 +38,9 @@ class ContactsController < ApplicationController
   # POST /contacts
   def create
     allow
-    @contact = Contact.new(contact_params, user_id: current_user.id)
+    @contact = Contact.new(contact_params) { |c|
+      c.user = current_user
+    }
 
     respond_to do |format|
       if @contact.save
