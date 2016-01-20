@@ -1,6 +1,4 @@
-<div id="grade_ticket_tree" data-grade-ticket-tree="<% @event.grade_ticket_tree.as_json %>"</div>
 <%= javascript_include_tag "concerts_form" %>
-
 <%= form_for(@concert) do |f| %>
   <% if @concert.errors.any? %>
     <div id="error_explanation">
