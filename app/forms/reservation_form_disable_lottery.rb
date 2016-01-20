@@ -1,17 +1,8 @@
 # coding: utf-8
-class ReservationFormDisableLottery < ReservationForm
-  include ActiveAttr::Model
-  include ActiveModel::Associations
+class ReservationFormDisableLottery
+  include ReservationForm
 
-  def [](attr)
-    self.send(attr)
-  end
-
-  def []=(attr, value)
-    self.send("#{attr}=", value)
-  end
-
-  attr_reader :ticket_ids
+  attr_accessor :ticket_ids
 
   has_many :tickets
 
