@@ -1,4 +1,4 @@
-<div id="grade_ticket" data-grade-ticket="<%= @event.grade_ticket.to_json %>"/>
+<div id="grade_ticket" data-grade-ticket="<%= @event.grade_ticket.to_json %>"></div>
 <%= javascript_include_tag 'reservations_form' %>
 
 <%= simple_form_for(@reservation_form, url: :reservations) do |f| %>
