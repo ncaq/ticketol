@@ -49,13 +49,13 @@ class ReservationsController < ApplicationController
   def create
     if current_user && current_user.buyer?
       allow
-      @reservation_form = create_reservation_form
+      create_reservation_form
       respond_to do |format|
-        if @reservation = @reservation_form.save
-          format.html { redirect_to reservation, notice: 'Reservation was successfully created.' }
+        if @reservation = @reservation_form.record_save
+          format.html { redirect_to @reservation, notice: 'Reservation was successfully created.' }
         else
           format.html {
-            params[:event][:id] = @event.id
+            @event = @reservation_form.grade.event
             render :new
           }
         end
@@ -80,10 +80,7 @@ class ReservationsController < ApplicationController
   end
 
   def create_reservation_form
-    if params[:reservation_form_enable_lottery]
-      ReservationFormEnableLottery.new(reservation_params)
-    else
-      ReservationFormDisableLottery.new(reservation_params)
-    end
+    @reservation_form = params[:reservation_form_enable_lottery] ? ReservationFormEnableLottery.new(reservation_params) : ReservationFormDisableLottery.new(reservation_params)
+    @reservation_form.user = current_user
   end
 end

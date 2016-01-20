@@ -15,17 +15,31 @@ module ReservationForm
       end
 
       attr_accessor :user_id
+      belongs_to :user
       attr_accessor :grade_id
+      belongs_to :grade
       attribute :payment_method, :type => Integer
 
-      belongs_to :user
-      belongs_to :grade
+      validate :validate_user_is_buyer
+      def validate_user_is_buyer
+        unless self.user.buyer?
+          errors[:user_id] = 'ログインユーザーが不正です'
+        end
+      end
+
+      validate :validate_event_sell_ok?
+      def validate_event_sell_ok?
+        unless self.grade.event.sell_ok?
+          errors[:grade_id] = '販売できません'
+        end
+      end
 
       validates :payment_method, numericality: { only_integer: true }, inclusion: { in: Reservation.payment_methods.values }
 
-      def save
+      def record_save
         self.valid?
-        return Reservation.create!(self)
+        record = Reservation.new()
+        return record.from_form(self) ? record : false
       end
     }
   end

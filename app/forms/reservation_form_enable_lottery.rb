@@ -9,7 +9,7 @@ class ReservationFormEnableLottery
   validate :validate_enable_lottery
   def validate_enable_lottery
     unless self.grade.event.lottery
-      error[:base] = '購入対象が不正です'
+      error[:grade_id] = '購入対象が不正です'
     end
   end
 end

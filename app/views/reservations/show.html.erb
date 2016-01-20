@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<% if @reservation.event.lottery && !@reservation.tickets.empty? %>
+<% if @reservation.grade.event.lottery && !@reservation.tickets.empty? %>
   当選しました
 <% end %>
 
