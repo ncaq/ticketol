@@ -1,10 +1,17 @@
 <p id="notice"><%= notice %></p>
 
-<% if @reservation.grade.event.lottery && !@reservation.tickets.empty? %>
-  当選しました
+<% if @reservation.grade.event.lottery %>
+  <% case @reservation.buy_state %>
+  <% when 'lottery_pending' %>
+    抽選待ちです
+  <% when 'win' %>
+    当選しました
+  <% when 'lose' %>
+    落選しました
+  <% end %>
 <% end %>
 
-<% if @reservation.convenience? && @reservation.convenience_password %>
+<% if @reservation.win? && @reservation.convenience? && @reservation.convenience_password %>
   <p>
     あなたのコンビニシステム用受け取り番号は<b><%= @reservation.convenience_password %></b>です
   </p>
