@@ -1,52 +1,20 @@
-<%= javascript_include_tag "reservations_form" %>
-<%= form_for(@reservation) do |f| %>
-  <% if @reservation.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
+<div id="grade_ticket" data-grade-ticket="<%= @event.grade_ticket.to_json %>"/>
+<%= javascript_include_tag 'reservations_form' %>
 
-      <ul>
-        <% @reservation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%= hidden_field :event, :id, :value => @event.id %>
-
-  <div class="field">
-    <%= label :concert, 'コンサート' %><br>
-    <%= text_field :concert, :title, :disabled => true, :value => @concert.title %>
-  </div>
-
-  <div class="field">
-    <%= label :event, '会場' %><br>
-    <%= text_field :event, :place, :disabled => true, :value => @event.place %>
-  </div>
-
-  <div class="field">
-    <%= label :grade, '席グレード' %><br>
-    <%= select :grade, :id, @event.grades.map { |g| [g.name + '(' + g.price.to_s + '円)', g.id] } %>
-  </div>
-
-  <% if @event.lottery %>
-    <%= label :volume, '購入数' %>
-    <%= number_field :volume, '購入数', value: 1 %>
-  <% else %>
-    <%= f.nested_fields_for :tickets do |ticket_f| %>
-      <%= ticket_f.label :id, '席番号' %>
-      <%= ticket_f.select :id, [] %>
-      <%= ticket_f.remove_nested_fields_link %>
-    <% end %>
-    <%= f.add_nested_fields_link :tickets %>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :payment_method, '支払い方法' %><br>
-    <%= f.select :payment_method, Reservation.payment_methods.keys.to_a %>
-  </div>
-
-  <div class="actions">
+<% if @event.lottery %>
+  <%= simple_form_for(@reservation_form, url: :reservations) do |f| %>
+    <%= f.input :grade_id, label: '席グレード', collection: @event.grades.map{|g| [g.name + '(' + g.price.to_s + '円)', g.id]} %>
+    <%= f.input :volume, label: '購入数' %>
+    <%= f.input :payment_method, label: '支払い方法', collection: Reservation.payment_methods, include_blank: false %>
     <%= f.submit '購入' %>
-  </div>
+  <% end %>
+<% else %>
+  <%= simple_form_for(@reservation_form, url: :reservations) do |f| %>
+    <%= select :grade, :id, @event.grades.map{|g| [g.name + '(' + g.price.to_s + '円)', g.id]}, label: '席グレード' %>
+    <%= f.input :tickets_id, collection: @event.grade_ticket.first[:tickets], include_blank: false,
+    :input_html => { :id => '', :name => 'reservation_form_disable_lottery[tickets_id][1]', :class => 'tickets_id'} %>
+    <%= f.button :button, 'チケット追加', type: 'button', class: 'addTicket' %>
+    <%= f.input :payment_method, label: '支払い方法', collection: Reservation.payment_methods, include_blank: false %>
+    <%= f.submit '購入' %>
+  <% end %>
 <% end %>

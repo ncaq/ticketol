@@ -20,8 +20,8 @@ class Event < ActiveRecord::Base
     self.sell_end < Time.zone.now
   end
 
-  def grade_ticket_tree
-    self.grades.map{ |g| g.tickets.inventory.map{ |t| [t.seat, t.id] } }
+  def grade_ticket
+    self.grades.map{ |g| {group_id: g.id, tickets: g.tickets.inventory.map{ |t| [t.seat, t.id]}}}
   end
 
   after_create :set_lottery_job

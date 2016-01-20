@@ -3,17 +3,17 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 gradeTickets = [].map.call(
-        document.querySelector("#grade_ticket_tree").getAttribute("data-grade-ticket-tree"),
-        (gtt) -> [].map.call(gtt, (t) -> new Option(t[0], t[1])))
+        JSON.parse(document.querySelector("#grade_ticket").getAttribute("data-grade-ticket")),
+        (gt) -> [].map.call(gt["tickets"], (t) -> new Option(t[0], t[1])))
 
 reservationsMain = ->
         gradeSelect = document.querySelector("#grade_id")
         updateGradeTicketsAll(gradeSelect)
         gradeSelect.addEventListener("change", (e) -> updateGradeTicketsAll(e.target))
-        $(document).on("fields_added.nested_form_fields", e => console.log(e))
+        document.querySelector(".addTicket").addEventListener("click", (e) -> addTicketListener())
 
 updateGradeTicketsAll = (gradeSelect) ->
-        ticketSelects = document.querySelectorAll(".nested_reservation_tickets select")
+        ticketSelects = document.querySelectorAll("select.tickets_id")
         [].forEach.call(ticketSelects, (ticketSelect) ->
                 updateGradeTickets(gradeSelect, ticketSelect))
 
@@ -24,9 +24,7 @@ updateGradeTickets = (gradeSelect, ticketSelect) ->
                 ticketSelect.appendChild(o.cloneNode(true)))
 
 addTicketListener = (e) ->
-        gradeSelect = document.querySelector("#grade_id")
-        selects = document.querySelectorAll(".nested_reservation_tickets select")
-        lastSelect = selects[selects.length - 1]
-        updateGradeTickets(gradeSelect, lastSelect)
+        t = document.querySelector(".tickets_id")
+        t.parentNode.appendChild(t.cloneNode(true))
 
 window.addEventListener("load", reservationsMain)
