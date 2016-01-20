@@ -6,6 +6,15 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+require 'find'
+
+@app_files = Find.find('.').select{ |fp| fp.end_with?('.rb') }
+@avoid_overlap = 0
+def random_word()
+  @avoid_overlap += 1
+  File.read(@app_files.sample).scan(/\w+/).sample() + @avoid_overlap.to_s
+end
+
 def create_user(name, role)
   User.create! { |u|
     u.email = name + '@example.com'
@@ -17,28 +26,8 @@ def create_user(name, role)
   }
 end
 
-def set_seat(event)
-  seat = 100
-  size = 10
-  [['s', '10000'], ['a', '5000'], ['b', '2000']].each{ | (name, price) |
-    grade = Grade.new
-    grade.name = name
-    grade.price = price
-    event.grades << grade
-    grade.save!
-    tickets = (seat..seat + size).map{ |i|
-      ticket = Ticket.new
-      ticket.seat = i.to_s
-      ticket
-    }
-    grade.tickets = tickets
-    tickets.each(&:save!)
-    seat += size
-  }
-end
-
 case Rails.env
-when "development"
+when 'development'
   if ENV['ticketol_admin_password']
     User.create! { |u|
       u.email = 'admin@example.com'
@@ -49,70 +38,71 @@ when "development"
     }
   else
     p 'May be you forgot'
-    p 'export ticketol_admin_password=hogehoge'
+    p 'export ticketol_admin_password'
   end
 
-  create_user('buyer', 'buyer')
-  create_user('buyer1', 'buyer')
-  create_user('buyer2', 'buyer')
-  create_user('buyer3', 'buyer')
-
+  create_user('buyer',  'buyer')
   create_user('seller', 'seller')
-  create_user('seller1', 'seller')
-  create_user('seller2', 'seller')
-  create_user('seller3', 'seller')
 
-  create_user('suspend', 'admin') { |u|
-    u.suspend = true
+  (0..10).each{ |n|
+    create_user('buyer'          + n.to_s, 'buyer')
+    create_user('seller_pending' + n.to_s, 'seller_pending')
+    create_user('seller'         + n.to_s, 'seller')
+    create_user('admin'          + n.to_s, 'admin')
+    create_user('suspend_buyer'  + n.to_s, 'buyer') { |u|
+      u.suspend = true
+    }
   }
 
-  concert = Concert.new
-  concert.title = 'seed'
-  concert.artist = 'foo bar'
-  concert.user_id = User.where(name: 'seller').first.id
-  concert.save!
+  rand(3..5).times {
+    concert = Concert.create!{ |c|
+      c.title  = random_word()
+      c.artist = random_word()
+      c.user   = User.where(name: 'seller').sample
+    }
 
-  begin
-    event = Event.new
-    event.place = 'non_lottery_event'
-    event.date       = 20.day.from_now
-    event.sell_start = Time.zone.now
-    event.sell_end   = 10.day.from_now
-    event.lottery = false
-    concert.events << event
-    event.save!
-    set_seat(event)
-  end
+    rand(1..5).times {
+      event = Event.create!{ |e|
+        e.place      = random_word()
+        e.date       = rand(5..9).day.from_now
+        e.sell_start = rand(0..60).second.from_now
+        e.sell_end   = rand(1..4).day.from_now
+        e.lottery    = rand(0..1)
+        e.concert    = concert
+      }
 
-  begin
-    event = Event.new
-    event.place = 'lottery_event'
-    event.date       = 20.day.from_now
-    event.sell_start = Time.zone.now
-    event.sell_end   = 10.day.from_now
-    event.lottery = true
-    concert.events << event
-    event.save!
-    set_seat(event)
-  end
-
-  begin
-    event = Event.new
-    event.place = 'soon_lottery_event'
-    event.date       = 10.minute.from_now
-    event.sell_start = Time.zone.now
-    event.sell_end   = 10.second.from_now
-    event.lottery = true
-    concert.events << event
-    event.save!
-    set_seat(event)
-
-    # User.buyer.each { |u|
-    #   res = Reservation.new { |r|
-    #     r.user = u
-    #     r.convenience!
-    #   }
-    #   res.lottery(event.grades.first, 1 + Random.rand(3))
-    # }
-  end
+      rand(1..5).times {
+        grade = Grade.create! { |g|
+          g.name  = random_word()
+          g.price = rand(1000..10000)
+          g.event = event
+        }
+        seat_start = rand(0..100)
+        seat_end = seat_start + rand(1..30)
+        (seat_start..seat_end).map { |seat_name|
+          Ticket.create! { |t|
+            t.seat = seat_name
+            t.grade = grade
+          }
+        }
+        rand(0..(seat_end - seat_start)).times {
+          if event.lottery
+            r = ReservationFormEnableLottery.new
+            r.volume = rand(1..4)
+          else
+            r = ReservationFormDisableLottery.new
+            r.tickets = grade.tickets.sample(rand(1..4))
+          end
+          r.user = User.buyer.sample
+          r.grade = grade
+          r.payment_method = Reservation.payment_methods.keys.sample
+          begin
+            r.record_save
+          rescue => e
+            puts e
+          end
+        }
+      }
+    }
+  }
 end
