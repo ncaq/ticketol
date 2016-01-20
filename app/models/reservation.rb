@@ -26,12 +26,12 @@ class Reservation < ActiveRecord::Base
 
   def disable_lottery(form)
     self.volume = form.ticket_ids.length
-    self.save!
     self.buy(form.ticket_ids)
   end
 
   def buy(ticket_ids)
     ActiveRecord::Base.transaction {
+      self.save!
       try_buy_tickets = Ticket.where(id: ticket_ids)
       success_buy_tickets_length = Ticket.where(id: ticket_ids, reservation_id: nil).
                                    update_all(:reservation_id => self.id)
