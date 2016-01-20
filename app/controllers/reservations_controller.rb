@@ -47,6 +47,22 @@ class ReservationsController < ApplicationController
   end
 
   def create
+    if current_user && current_user.buyer?
+      allow
+      @reservation_form = create_reservation_form
+      respond_to do |format|
+        if @reservation = @reservation_form.save
+          format.html { redirect_to reservation, notice: 'Reservation was successfully created.' }
+        else
+          format.html {
+            params[:event][:id] = @event.id
+            render :new
+          }
+        end
+      end
+    else
+      deny
+    end
   end
 
   private
@@ -56,5 +72,18 @@ class ReservationsController < ApplicationController
   end
 
   def reservation_params
+    if params[:reservation_form_enable_lottery]
+      params.require(:reservation_form_enable_lottery).permit(:grade_id, :payment_method, :volume)
+    else
+      params.require(:reservation_form_disable_lottery).permit(:grade_id, :payment_method, tickets_attributes: [:id])
+    end
+  end
+
+  def create_reservation_form
+    if params[:reservation_form_enable_lottery]
+      ReservationFormEnableLottery.new(reservation_params)
+    else
+      ReservationFormDisableLottery.new(reservation_params)
+    end
   end
 end

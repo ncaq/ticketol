@@ -24,8 +24,8 @@ module ReservationForm
       validates :payment_method, numericality: { only_integer: true }, inclusion: { in: Reservation.payment_methods.values }
 
       def save
-        form.valid?
-        Reservation.create!(self)
+        self.valid?
+        return Reservation.create!(self)
       end
     }
   end
