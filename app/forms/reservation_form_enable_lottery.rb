@@ -4,7 +4,14 @@ class ReservationFormEnableLottery < ReservationForm
   include ActiveAttr::TypecastedAttributes
   include ActiveModel::Associations
 
-  attribute :grade_id, :type => Integer
+  def [](attr)
+    self.send(attr)
+  end
+
+  def []=(attr, value)
+    self.send("#{attr}=", value)
+  end
+
   attribute :volume, :type => Integer
 
   validates :volume, numericality: { only_integer: true, greater_than: 0 }

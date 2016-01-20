@@ -21,7 +21,7 @@ class Event < ActiveRecord::Base
   end
 
   def grade_ticket
-    self.grades.map{ |g| {group_id: g.id, tickets: g.tickets.inventory.map{ |t| [t.seat, t.id]}}}
+    self.grades.map{ |g| {grade_id: g.id, tickets: g.tickets.inventory.map{ |t| [t.seat, t.id]}}}
   end
 
   after_create :set_lottery_job
