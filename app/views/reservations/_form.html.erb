@@ -2,7 +2,7 @@
 <%= javascript_include_tag 'reservations_form' %>
 
 <%= simple_form_for(@reservation_form, url: :reservations) do |f| %>
-  <%= f.input :grade_id, label: '席グレード', collection: @event.grades.map{|g| [g.name + '(' + g.price.to_s + '円)', g.id]}, include_blank: false %>
+  <%= f.input :grade_id, label: '席グレード', collection: @event.grades.order(:id).map{|g| [g.name + '(' + g.price.to_s + '円)', g.id]}, include_blank: false %>
   <% if @event.lottery %>
     <%= f.input :volume, label: '購入数', as: :integer, collection: 1..4, input_html: {value: '1'} %>
   <% else %>

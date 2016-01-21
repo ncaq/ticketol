@@ -26,7 +26,6 @@ class ReservationsController < ApplicationController
 
   def new
     @event = Event.find(params[:event][:id])
-    @grades = @event.grades
     @concert = @event.concert
     if current_user.nil?
       allow
