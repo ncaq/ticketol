@@ -55,11 +55,11 @@ when 'development'
     }
   }
 
-  rand(3..5).times {
+  rand(5..10).times {
     concert = Concert.create!{ |c|
       c.title  = random_word()
       c.artist = random_word()
-      c.user   = User.where(name: 'seller').sample
+      c.user   = User.seller.sample
     }
 
     rand(1..5).times {
