@@ -1,5 +1,7 @@
-.nested_fields[class$="_tickets"] {
-    input {
-        width: 8ex;
-    }
+.nested_fields[class$="_tickets"] * {
+    width: 8ex;
+}
+
+div[class$="_seat"] {
+    display: inline;
 }

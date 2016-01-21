@@ -1,65 +1,36 @@
-<%= javascript_include_tag "concerts_form" %>
-<%= form_for(@concert) do |f| %>
-  <% if @concert.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@concert.errors.count, "error") %> prohibited this concert from being saved:</h2>
-
-      <ul>
-        <% @concert.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :title %>
-    <%= f.text_area :title %>
-  </div>
-  <div class="field">
-    <%= f.label :artist %>
-    <%= f.text_area :artist %>
-  </div>
-  <div class="field">
-    <%= f.label :uploaded_file, "画像" %>
-    <%= f.file_field :uploaded_file, accept: 'image/png' %>
-  </div>
+<%= javascript_include_tag 'concerts_form' %>
+<%= simple_form_for(@concert) do |f| %>
+  <%= f.input :title, as: :string %>
+  <%= f.input :artist, as: :string %>
+  <%= f.input :uploaded_file, label: '画像', as: :file, accept: 'image/png' %>
 
   <%= f.nested_fields_for :events do |event_f| %>
-    <%= event_f.label :place, "会場" %>
-    <%= event_f.text_field :place %><br />
-    <%= event_f.label :date, "公演日時" %>
-    <%= event_f.date_field :date %><br />
-    <%= event_f.label :sell_start, "販売開始日時" %>
-    <%= event_f.date_field :sell_start %><br />
-    <%= event_f.label :sell_end, "販売終了日時" %>
-    <%= event_f.date_field :sell_end %><br />
-    <%= event_f.label :lottery, "抽選の有無" %>
-    <%= event_f.check_box :lottery %><br />
+    <%= event_f.input :place, label: '会場', as: :string %>
+    <%= event_f.input :date, label: '公演日時' %>
+    <%= event_f.input :sell_start, label: '販売開始日時' %>
+    <%= event_f.input :sell_end, label: '販売終了日時' %>
+    <%= event_f.input :lottery, label: '抽選の有無' %>
 
     <%= event_f.nested_fields_for :grades do |grade_f| %>
-      <%= grade_f.label :name, "ブロック名" %>
-      <%= grade_f.text_field :name %></br>
-      <%= grade_f.label :price, "価格" %>
-      <%= grade_f.text_field :price %></br>
+      <%= grade_f.input :name, label: 'ブロック名', as: :string %>
+      <%= grade_f.input :price, label: '価格', as: :integer %>
 
-      <%= grade_f.label :tickets, "席番号" %>
+      <label>
+        席番号
+      </label>
       <%= grade_f.nested_fields_for :tickets, wrapper_tag: :span do |ticket_f| %>
-        <%= ticket_f.text_field :seat %>
+        <%= ticket_f.input :seat, label: false, as: :string %>
       <% end %>
-      <br>
       <%= grade_f.add_nested_fields_link :tickets %>
-      <button class=".clearTicket" type="reset" onclick="clearTicket(event)">clear</button>
+      <%= f.button :button, 'clear', type: 'button', class: '.clearTicket', onclick: 'clearTicket(event)' %>
     <% end %>
     <%= event_f.add_nested_fields_link :grades %>
     <label>
       CSV(UTF-8)からインポートする
-      <input type="file" class=".importGradeTicket" form ="null" accept="text/comma-separated-values" onchange="importGradeTicket(event)"></input>
+      <input type='file' class='.importGradeTicket' form='' accept='text/comma-separated-values' onchange='importGradeTicket(event)'></input>
     </label>
   <% end %>
   <%= f.add_nested_fields_link :events %>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <%= f.submit '購入' %>
 <% end %>
