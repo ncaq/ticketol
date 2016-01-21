@@ -20,8 +20,8 @@
         <td><%= user.name %></td>
         <td><%= user.role %></td>
         <td><%= user.suspend %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_registration_path(user) %></td>
+        <td><%= link_to 'Show', user_path(user) %></td>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
       </tr>
     <% end %>
   </tbody>
