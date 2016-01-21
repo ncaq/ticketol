@@ -10,14 +10,11 @@ class ReservationFormDisableLottery
   end
 
   def record_save
-    begin
-      self.valid?
+    if self.valid?
       record = Reservation.new()
       return record.from_form(self) ? record : false
-    rescue => e
-      puts e
+    else
       errors[:base] = '購入できませんでした,もう一度やり直してください'
-      return false
     end
   end
 

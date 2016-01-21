@@ -7,9 +7,12 @@ module ReservationForm
       include ActiveModel::Associations
 
       def record_save
-        self.valid?
-        record = Reservation.new()
-        return record.from_form(self) ? record : false
+        if self.valid?
+          record = Reservation.new()
+          return record.from_form(self) ? record : false
+        else
+          errors[:base] = '購入できませんでした,もう一度やり直してください'
+        end
       end
 
       def [](attr)
