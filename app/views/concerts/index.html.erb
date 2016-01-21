@@ -18,9 +18,6 @@
         <td><%= concert.artist %></td>
         <td><%= concert.user.name %></td>
         <td><%= link_to 'Show', concert %></td>
-        <% if had? && concert.destroy_ok? %>
-          <td><%= link_to 'Destroy', concert, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
       </tr>
     <% end %>
   </tbody>
