@@ -3,7 +3,7 @@ require 'rmagick'
 class Concert < ActiveRecord::Base
   belongs_to :user
 
-  has_many :events
+  has_many :events, :dependent => :destroy
   accepts_nested_attributes_for :events
 
   before_save :set_default_value
@@ -17,5 +17,9 @@ class Concert < ActiveRecord::Base
 
   def uploaded_file=(file)
     self.image = file.read
+  end
+
+  def destroy_ok?
+    !self.events.any?(&:sell_start?)
   end
 end

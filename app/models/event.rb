@@ -1,7 +1,7 @@
 # coding: utf-8
 class Event < ActiveRecord::Base
   belongs_to :concert
-  has_many :grades
+  has_many :grades, :dependent => :destroy
   accepts_nested_attributes_for :grades
 
   def sell_ok?

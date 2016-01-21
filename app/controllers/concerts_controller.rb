@@ -1,6 +1,6 @@
 # coding: utf-8
 class ConcertsController < ApplicationController
-  before_action :set_concert, only: [:show, :edit, :update, :image]
+  before_action :set_concert, only: [:show, :destroy, :image]
 
   # GET /concerts
   def index
@@ -24,35 +24,58 @@ class ConcertsController < ApplicationController
 
   # GET /concerts/new
   def new
-    write?
-    @concert = Concert.new
-    @concert.events.build
-    @concert.events.map { |e|
-      e.grades.build
-      e.grades.map { |g|
-        g.tickets.build
+    if current_user && (current_user.admin? || current_user.seller?)
+      allow
+      @concert = Concert.new
+      @concert.events.build
+      @concert.events.map { |e|
+        e.grades.build
+        e.grades.map { |g|
+          g.tickets.build
+        }
       }
-    }
+    else
+      deny
+    end
   end
 
   # POST /concerts
   def create
-    write?
-    @concert = Concert.new(concert_params)
-    @concert.user_id = current_user.id
-
-    respond_to do |format|
-      if @concert.save
-        format.html { redirect_to @concert, notice: 'Concert was successfully created.' }
-      else
-        format.html { render :new }
+    if current_user && (current_user.admin? || current_user.seller?)
+      allow
+      @concert = Concert.new(concert_params) { |c|
+        c.user = current_user
+      }
+      respond_to do |format|
+        if @concert.save
+          format.html { redirect_to @concert, notice: 'Concert was successfully created.' }
+        else
+          format.html { render :new }
+        end
       end
+    else
+      deny
+    end
+  end
+
+  def destroy
+    if self.had? && @concert.destroy_ok?
+      allow
+      @concert.destroy
+      flash[:success] = "concert deleted"
+      redirect_to :root
+    else
+      deny
     end
   end
 
   def image
     allow
     send_data @concert.image, type: 'image/png', disposition: 'inline'
+  end
+
+  def had?
+    current_user && current_user.admin? || (current_user.seller? && current_user == @concert.user)
   end
 
   private
@@ -68,13 +91,5 @@ class ConcertsController < ApplicationController
       events_attributes: [:place, :date, :sell_start, :sell_end, :lottery,
                           grades_attributes: [:name, :price,
                                               tickets_attributes: [:seat]]])
-  end
-
-  def write?
-    if current_user && (current_user.admin? || current_user.seller?)
-      allow
-    else
-      deny
-    end
   end
 end

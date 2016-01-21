@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   }
   resources :users,        :only => [:index, :show, :edit, :update]
 
-  resources :concerts,     :only => [:index, :show, :new, :create, :edit, :update] { || member { || get 'image' } }
+  resources :concerts,     :only => [:index, :show, :new, :create, :destroy] { member { get 'image' } }
   resources :contacts,     :only => [:index, :show, :new, :create, :edit, :update]
   resources :events,       :only => [:show]
   resources :reservations, :only => [:index, :show, :new, :create]
