@@ -134,11 +134,11 @@ when 'development'
       }
       10.times.each{ |gi|
         grade = Grade.create! { |g|
-          g.name  = gi.to_s
-          g.price = gi * 100
+          g.name  = (gi + 1).to_s
+          g.price = (gi + 1) * 1000
           g.event = event
         }
-        seat_start = gi * 100
+        seat_start = (gi + 1) * 100
         seat_end   = seat_start + 100
         (seat_start..seat_end).map { |seat_name|
           Ticket.create! { |t|
