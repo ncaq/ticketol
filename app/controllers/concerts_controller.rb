@@ -5,12 +5,13 @@ class ConcertsController < ApplicationController
   # GET /concerts
   def index
     allow
-    if params[:q]
-      q = params[:q]
+    if q = params[:q]
       @concerts = Concert.where(
         Concert.arel_table[:title].matches("%#{q}%").or(
         Concert.arel_table[:artist].matches("%#{q}%")
-      )).sort{|c| c.events.any?(&:sell_ok?) ? 0 : 1 }
+      )).order(:updated_at).reverse_order.sort{|c| c.events.any?(&:sell_ok?) ? 0 : 1 }
+    elsif user_id = params[:user_id]
+      @concerts = Concert.where(user_id: user_id).order(:updated_at).reverse_order
     else
       @concerts = Concert.all
     end
