@@ -91,7 +91,7 @@ when 'development'
         seat_end = seat_start + rand(1..30)
         (seat_start..seat_end).map { |seat_name|
           Ticket.create! { |t|
-            t.seat = seat_name
+            t.seat = grade.name.first + seat_name.to_s
             t.grade = grade
           }
         }
@@ -134,7 +134,7 @@ when 'development'
       }
       10.times.each{ |gi|
         grade = Grade.create! { |g|
-          g.name  = gi
+          g.name  = gi.to_s
           g.price = gi * 100
           g.event = event
         }
@@ -142,7 +142,7 @@ when 'development'
         seat_end   = seat_start + 100
         (seat_start..seat_end).map { |seat_name|
           Ticket.create! { |t|
-            t.seat = seat_name
+            t.seat = grade.name.first + seat_name.to_s
             t.grade = grade
           }
         }
