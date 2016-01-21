@@ -9,15 +9,6 @@ class ReservationFormDisableLottery
     end
   end
 
-  def record_save
-    if self.valid?
-      record = Reservation.new()
-      return record.from_form(self) ? record : false
-    else
-      errors[:base] = '購入できませんでした,もう一度やり直してください'
-    end
-  end
-
   attr_accessor :ticket_ids
   has_many :tickets
 
