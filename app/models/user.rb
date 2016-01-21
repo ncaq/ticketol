@@ -4,9 +4,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  enum role: [:default, :admin, :buyer, :seller_pending, :seller]
+  enum role: [:buyer, :seller_pending, :seller, :admin]
 
   def active_for_authentication?
-    !self.suspend && !self.default?
+    !self.suspend
   end
 end

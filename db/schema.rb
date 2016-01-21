@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20160105092452) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "name",                   default: "",    null: false
-    t.integer  "role",                                   null: false
+    t.integer  "role",                   default: 0,     null: false
     t.boolean  "suspend",                default: false, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false

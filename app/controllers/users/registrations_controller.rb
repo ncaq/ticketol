@@ -6,8 +6,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
     if params[:is_seller]
       resource.seller_pending!
-    else
-      resource.buyer!
     end
   end
 
