@@ -12,16 +12,10 @@
     <p class="alert"><%= alert %></p>
 
     <ul>
-      <li class="searchNav">
+      <li>
         <%= link_to "トップ", root_path %>
         <%= link_to "お問い合わせ", new_contact_path %>
         <%= link_to "コンサート一覧", concerts_path %>
-        <%= form_tag(concerts_path, {:method => "get"}) do |f| %>
-          <%= search_field_tag :q %>
-          <%= submit_tag "コンサート検索"%>
-        <% end %>
-      </li>
-      <li>
         <% if user_signed_in? %>
           Logged in as <strong><%= current_user.email %></strong>.
           <% case current_user.role %>
@@ -30,6 +24,7 @@
             <%= link_to "問い合わせ一覧", contacts_path %> |
           <% when "seller" %>
             <%= link_to "コンサート登録", new_concert_path %> |
+            <%= link_to "登録したコンサート一覧", concerts_path(user_id: current_user.id) %> |
           <% end %>
           <%= link_to "チケット一覧", reservations_path %> |
           <%= link_to "Edit profile", edit_user_registration_path %> |
@@ -37,6 +32,12 @@
         <% else %>
           <%= link_to "Sign up", new_user_registration_path %> |
           <%= link_to "Login", new_user_session_path %>
+        <% end %>
+      </li>
+      <li class="searchNav">
+        <%= form_tag(concerts_path, {:method => "get"}) do |f| %>
+          <%= search_field_tag :q %>
+          <%= submit_tag "コンサート検索"%>
         <% end %>
       </li>
     </ul>
