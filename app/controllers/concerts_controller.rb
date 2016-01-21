@@ -75,7 +75,7 @@ class ConcertsController < ApplicationController
   end
 
   def had?
-    current_user && current_user.admin? || (current_user.seller? && current_user == @concert.user)
+    current_user && (current_user.admin? || (current_user.seller? && current_user == @concert.user))
   end
   helper_method :had?
 
