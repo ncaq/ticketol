@@ -8,42 +8,46 @@
   </head>
   <body>
 
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
-    <ul>
-      <li>
-        <%= link_to "トップ", root_path %>
-        <%= link_to "コンサート一覧", concerts_path %>
+    <nav class="navbar navbar-default">
+      <ul class="nav navbar-nav">
+        <li><%= link_to "トップ", root_path %></li>
+        <li><%= link_to "コンサート一覧", concerts_path %></li>
         <% if user_signed_in? %>
-          Logged in as <strong><%= current_user.email %></strong>.
           <% if current_user.admin? %>
-            <%= link_to "ユーザ一覧", users_path %>
-            <%= link_to "全ユーザのお問い合わせ一覧", contacts_path %>
-            <%= link_to "全ユーザのチケット一覧", reservations_path %>
+            <li><%= link_to "ユーザ一覧", users_path %></li>
+            <li><%= link_to "全ユーザのお問い合わせ一覧", contacts_path %></li>
+            <li><%= link_to "全ユーザのチケット一覧", reservations_path %></li>
           <% else %>
-            <%= link_to "お問い合わせ", new_contact_path %>
-            <%= link_to "お問い合わせ確認", contacts_path %>
-            <%= link_to "注文チケット確認", reservations_path %>
+            <li><%= link_to "お問い合わせ", new_contact_path %></li>
+            <li><%= link_to "お問い合わせ確認", contacts_path %></li>
+            <li><%= link_to "注文チケット確認", reservations_path %></li>
             <% if current_user.seller? %>
-              <%= link_to "コンサート登録", new_concert_path %>
-              <%= link_to "登録したコンサート一覧", concerts_path(user_id: current_user.id) %>
+              <li><%= link_to "コンサート登録", new_concert_path %></li>
+              <li><%= link_to "登録したコンサート一覧", concerts_path(user_id: current_user.id) %></li>
             <% end %>
           <% end %>
-          <%= link_to "Edit profile", edit_user_registration_path %>
-          <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+          <li><%= link_to "Edit profile", edit_user_registration_path %></li>
+          <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
+          <li>
+            Logged in as <strong><%= current_user.email %></strong>
+          </li>
         <% else %>
-          <%= link_to "Sign up", new_user_registration_path %>
-          <%= link_to "Login", new_user_session_path %>
+          <li><%= link_to "Sign up", new_user_registration_path %></li>
+          <li><%= link_to "Login", new_user_session_path %></li>
         <% end %>
-      </li>
-      <li class="searchNav">
-        <%= form_tag(concerts_path, {:method => "get"}) do |f| %>
-          <%= search_field_tag :q %>
-          <%= submit_tag "コンサート検索"%>
-        <% end %>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </nav>
+    <%= form_tag(concerts_path, {:method => "get"}) do |f| %>
+      <%= search_field_tag :q %>
+      <%= submit_tag "コンサート検索"%>
+    <% end %>
+    <% if notice %>
+      <div class="alert alert-success"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+      <div class="alert alert-danger"><%= alert %></div>
+    <% end %>
 
     <div class="container">
       <div class="row">
