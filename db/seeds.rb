@@ -115,4 +115,55 @@ when 'development'
       }
     }
   }
+
+  [['rapid_sell_start', 3], ['slow_sell_start', 100]].each { |(title, delay)|
+    concert = Concert.create!{ |c|
+      c.title  = title
+      c.artist = 'foo'
+      c.user   = User.where(name: 'seller').first
+    }
+
+    [false, true].each{ |b|
+      event = Event.create!{ |e|
+        e.place      = random_word()
+        e.sell_start = delay.minute.from_now
+        e.sell_end   = e.sell_start + 60.minute
+        e.date       = e.sell_end + 60.minute
+        e.lottery    = b
+        e.concert    = concert
+      }
+      10.times.each{ |gi|
+        grade = Grade.create! { |g|
+          g.name  = gi
+          g.price = gi * 100
+          g.event = event
+        }
+        seat_start = gi * 100
+        seat_end   = seat_start + 100
+        (seat_start..seat_end).map { |seat_name|
+          Ticket.create! { |t|
+            t.seat = seat_name
+            t.grade = grade
+          }
+        }
+        rand(0..(seat_end - seat_start)).times {
+          if event.lottery
+            r = ReservationFormEnableLottery.new
+            r.volume = rand(1..4)
+          else
+            r = ReservationFormDisableLottery.new
+            r.tickets = grade.tickets.sample(rand(1..4))
+          end
+          r.user = User.buyer.sample
+          r.grade = grade
+          r.payment_method = Reservation.payment_methods.keys.sample
+          begin
+            r.record_save
+          rescue => e
+            puts e
+          end
+        }
+      }
+    }
+  }
 end
