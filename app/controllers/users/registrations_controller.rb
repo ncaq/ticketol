@@ -4,7 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /users
   def create
     super
-    if params[:is_seller] then
+    if params[:is_seller]
       resource.seller_pending!
     else
       resource.buyer!
