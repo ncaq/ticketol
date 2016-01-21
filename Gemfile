@@ -26,6 +26,7 @@ gem 'devise', '~> 3.5.2'
 gem 'nested_form_fields'
 gem 'rmagick'
 gem 'simple_form'
+gem 'twitter-bootstrap-rails'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
