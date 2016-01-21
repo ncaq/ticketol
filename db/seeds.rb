@@ -67,7 +67,7 @@ when 'development'
         if rand(2) == 0
           e.place      = random_word()
           e.sell_start = rand(0..3).minute.from_now
-          e.sell_end   = e.sell_start + rand(0..5).minute
+          e.sell_end   = e.sell_start + rand(1..60).minute
           e.date       = e.sell_end + rand(1..2).minute
           e.lottery    = rand(0..1)
           e.concert    = concert
