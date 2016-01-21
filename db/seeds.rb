@@ -42,6 +42,7 @@ when 'development'
   end
 
   create_user('buyer',  'buyer')
+  create_user('seller_pending', 'seller_pending')
   create_user('seller', 'seller')
 
   (0..10).each{ |n|
