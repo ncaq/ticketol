@@ -77,6 +77,7 @@ class ConcertsController < ApplicationController
   def had?
     current_user && current_user.admin? || (current_user.seller? && current_user == @concert.user)
   end
+  helper_method :had?
 
   private
   # Use callbacks to share common setup or constraints between actions.
