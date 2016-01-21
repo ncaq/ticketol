@@ -66,16 +66,16 @@ when 'development'
       event = Event.create!{ |e|
         if rand(2) == 0
           e.place      = random_word()
-          e.date       = rand(60*10..60*60*24*5).second.from_now
-          e.sell_start = rand(0..60*1).second.from_now
-          e.sell_end   = rand(0..60*10).second.from_now
+          e.sell_start = rand(0..3).minute.from_now
+          e.sell_end   = e.sell_start + rand(0..5).minute
+          e.date       = e.sell_end + rand(1..2).minute
           e.lottery    = rand(0..1)
           e.concert    = concert
         else
           e.place      = random_word()
-          e.date       = rand(60*10..60*60*24*5).day.from_now
-          e.sell_start = rand(1..60*1).day.from_now
-          e.sell_end   = rand(1..60*10).day.from_now
+          e.sell_start = rand(10..100).minute.from_now
+          e.sell_end   = e.sell_start + rand(10..1000).minute
+          e.date       = e.sell_end + rand(1..60*5).minute
           e.lottery    = rand(0..1)
           e.concert    = concert
         end
