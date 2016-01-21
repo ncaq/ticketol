@@ -20,7 +20,9 @@
           <% else %>
             <li><%= link_to "お問い合わせ", new_contact_path %></li>
             <li><%= link_to "お問い合わせ確認", contacts_path %></li>
-            <li><%= link_to "注文チケット確認", reservations_path %></li>
+            <% if current_user.buyer? %>
+              <li><%= link_to "注文チケット確認", reservations_path %></li>
+            <% end %>
             <% if current_user.seller? %>
               <li><%= link_to "コンサート登録", new_concert_path %></li>
               <li><%= link_to "登録したコンサート一覧", concerts_path(user_id: current_user.id) %></li>
