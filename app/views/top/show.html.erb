@@ -2,19 +2,18 @@
 
 <article>
   <h1>新着コンサート</h1>
-  <ul>
+  <ul class="recentConcerts">
     <% @concerts.each do |concert| %>
-      <li>
-        <figure>
-          <%= image_tag image_concert_path(concert) %>
-          <figcaption>
-            <%= concert.title %>
-            <%= concert.artist %>
-            <%= concert.user.email %>
-            <%= link_to 'Show', concert %>
-          </figcaption>
-        </figure>
-      </li>
+      <%= link_to(concert) do %>
+        <li>
+          <figure>
+            <%= image_tag image_concert_path(concert) %>
+            <figcaption>
+              <%= concert.title %>
+            </figcaption>
+          </figure>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </article>

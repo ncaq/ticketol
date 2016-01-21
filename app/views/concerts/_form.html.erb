@@ -18,9 +18,11 @@
       <label>
         席番号
       </label>
-      <%= grade_f.nested_fields_for :tickets, wrapper_tag: :span do |ticket_f| %>
-        <%= ticket_f.input :seat, label: false, as: :string %>
-      <% end %>
+      <div class="row">
+        <%= grade_f.nested_fields_for :tickets, wrapper_tag: :span, wrapper_options: { class: 'col-md-1' } do |ticket_f| %>
+          <%= ticket_f.input :seat, label: false, as: :string, item_wrapper_class: 'inline' %>
+        <% end %>
+      </div>
       <%= grade_f.add_nested_fields_link :tickets %>
       <%= f.button :button, 'clear', type: 'button', class: '.clearTicket', onclick: 'clearTicket(event)' %>
     <% end %>
